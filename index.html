@@ -422,7 +422,7 @@
       <li>Only 1/6 of the image shows at first. Each guess reveals another section.</li>
       <li>You get <strong>6 guesses total</strong> — the last one is made against the fully revealed image.</li>
       <li>Correct fields turn <span style="color:var(--good);font-weight:600;">green</span>, incorrect ones turn <span style="color:var(--bad);font-weight:600;">red</span> — reuse that information on your next guess.</li>
-      <li>A new puzzle unlocks each day, numbered like Wordle. Share your result once you're done!</li>
+      <li>A new puzzle unlocks each day. Share your result once you're done!</li>
     </ul>
     <div class="modal-actions">
       <button type="button" class="btn-primary" id="howtoGotIt" style="flex:1;">Got it</button>
@@ -455,7 +455,8 @@ const ROUNDS = [
     day: 1, difficulty: "Bronze",
     team1: "London Spitfire", team2: "Philadelphia Fusion",
     year: 2018, tournament: "Playoffs",
-    image: "images/Day 1.png"
+    image: "images/Day 1.png",
+    revealImage: "images/Day 1 Answer.png"
   },
   {
     day: 2, difficulty: "Gold",
@@ -808,7 +809,7 @@ async function revealFieldsSequentially(fieldChecks){
     await delay(FLIP_MS / 2);
     field.classList.toggle('correct', fieldChecks[id]);
     field.classList.toggle('wrong', !fieldChecks[id]);
-    document.getElementById('hint'+capitalize(id)).textContent = fieldChecks[id] ? 'Correct — keep it' : 'Not correct';
+    document.getElementById('hint'+capitalize(id)).textContent = fieldChecks[id] ? 'Correct!' : 'Incorrect';
     await delay(FLIP_MS / 2);
     control.classList.remove('flip');
     await delay(FIELD_GAP_MS);
