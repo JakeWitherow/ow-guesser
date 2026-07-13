@@ -877,8 +877,8 @@ form.addEventListener('submit', async (e)=>{
   const guessedTeams = [norm(vTeam1), norm(vTeam2)];
   const answerTeams = [norm(r.team1), norm(r.team2)];
   const teamsCorrect = guessedTeams.slice().sort().join('|') === answerTeams.slice().sort().join('|');
-  const team1Ok = teamsCorrect || guessedTeams.includes(norm(r.team1));
-  const team2Ok = teamsCorrect || guessedTeams.includes(norm(r.team2));
+  const team1Ok = guessedTeams.includes(answerTeams[0]);
+  const team2Ok = guessedTeams.includes(answerTeams[1]);
   const yearOk  = norm(vYear) === norm(String(r.year));
   const tournamentOk = tournamentAnswers(r).some(t => norm(vTournament) === norm(t));
 
