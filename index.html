@@ -156,7 +156,14 @@
   .field.correct .hint{color:var(--good);}
 
   /* ---------- Guess reveal animation ---------- */
-  .field{perspective:400px;}
+  /* `perspective` establishes a new stacking context on the element it's
+     set on. Applying it to every .field permanently would trap each field's
+     autocomplete dropdown (z-index:30) inside that field's own stacking
+     context, so a later sibling field always paints over an earlier field's
+     open dropdown regardless of z-index. Scoping it to a class that's only
+     present for the ~260ms flip animation avoids that — dropdowns are
+     already hidden by the time a guess triggers the flip. */
+  .field.flip-3d{perspective:400px;}
   .control.flip{animation:fieldFlip 260ms ease;}
   @keyframes fieldFlip{
     0%{transform:rotateX(0deg);}
@@ -459,7 +466,16 @@
       - `revealImage` (optional): a different, fully-clear image shown once
         the round ends (in place of the puzzle image). Leave it out and the
         puzzle image itself will just be shown with all tiles cleared.
-      - `tournament` must be an exact string from the TOURNAMENTS list below.
+      - `tournament` should be an exact string from the TOURNAMENTS list
+        below. If more than one answer should count as correct (e.g. a
+        Stage that also counted as that Stage's Title Matches), give an
+        array instead of a single string, like:
+          tournament: ["Stage 2", "Stage 2 Title Matches"]
+        A guess is marked correct if it exactly matches ANY entry in the
+        array. The player only ever submits one tournament guess at a
+        time — this just means several different answers can satisfy it.
+        The first entry in the array is used as the "answer" text shown
+        in the result banner, share text, etc.
    ========================================================================= */
 const ROUNDS = [
   {
@@ -804,6 +820,12 @@ function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 
 function norm(s){ return (s||'').trim().toLowerCase(); }
 
+// A round's `tournament` can be a single string or an array of acceptable
+// strings (when more than one answer should count as correct). These
+// helpers let the rest of the code treat it uniformly.
+function tournamentAnswers(r){ return Array.isArray(r.tournament) ? r.tournament : [r.tournament]; }
+function tournamentDisplay(r){ return tournamentAnswers(r).join(' / '); }
+
 function delay(ms){ return new Promise(res => setTimeout(res, ms)); }
 
 const FIELD_ORDER = ['team1', 'team2', 'year', 'tournament'];
@@ -814,6 +836,7 @@ async function revealFieldsSequentially(fieldChecks){
   for(const id of FIELD_ORDER){
     const field = document.getElementById(id).closest('.field');
     const control = field.querySelector('.control');
+    field.classList.add('flip-3d');
     control.classList.remove('flip');
     void control.offsetWidth; // restart the animation if it just ran
     control.classList.add('flip');
@@ -823,6 +846,7 @@ async function revealFieldsSequentially(fieldChecks){
     document.getElementById('hint'+capitalize(id)).textContent = fieldChecks[id] ? 'Correct!' : 'Incorrect';
     await delay(FLIP_MS / 2);
     control.classList.remove('flip');
+    field.classList.remove('flip-3d');
     await delay(FIELD_GAP_MS);
   }
 }
@@ -856,7 +880,7 @@ form.addEventListener('submit', async (e)=>{
   const team1Ok = teamsCorrect || guessedTeams.includes(norm(r.team1));
   const team2Ok = teamsCorrect || guessedTeams.includes(norm(r.team2));
   const yearOk  = norm(vYear) === norm(String(r.year));
-  const tournamentOk = norm(vTournament) === norm(r.tournament);
+  const tournamentOk = tournamentAnswers(r).some(t => norm(vTournament) === norm(t));
 
   const fieldChecks = {team1:team1Ok, team2:team2Ok, year:yearOk, tournament:tournamentOk};
   const allCorrect = teamsCorrect && yearOk && tournamentOk;
@@ -950,7 +974,7 @@ function finishRound(win, gaveUp){
   resultEl.classList.add('show', win ? 'win' : 'lose');
   resultEl.classList.remove(win ? 'lose' : 'win');
   resultTitle.textContent = win ? `Identified in ${guesses.length}/${MAX_GUESSES} guesses` : (gaveUp ? 'Answer revealed' : 'Out of guesses');
-  resultBody.textContent = `${r.team1} vs ${r.team2} — ${r.year}, ${r.tournament}.`;
+  resultBody.textContent = `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}.`;
   submitBtn.disabled = true;
   giveUpBtn.disabled = true;
   mainShareBtn.disabled = false;
@@ -998,8 +1022,8 @@ function showModal(win, gaveUp){
   const r = ROUNDS[roundIndex];
   modalTitle.textContent = win ? 'Solved!' : (gaveUp ? 'Answer revealed' : 'Out of guesses');
   modalSubtitle.textContent = win
-    ? `${r.team1} vs ${r.team2} — ${r.year}, ${r.tournament}`
-    : `The answer was ${r.team1} vs ${r.team2} — ${r.year}, ${r.tournament}`;
+    ? `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`
+    : `The answer was ${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`;
   document.getElementById('modalStatPlayed').textContent = stats.played;
   document.getElementById('modalStatWinPct').textContent = stats.played ? Math.round(100*stats.wins/stats.played)+'%' : '0%';
   document.getElementById('modalStatStreak').textContent = stats.streak;
