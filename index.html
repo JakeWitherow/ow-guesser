@@ -826,6 +826,27 @@ function norm(s){ return (s||'').trim().toLowerCase(); }
 function tournamentAnswers(r){ return Array.isArray(r.tournament) ? r.tournament : [r.tournament]; }
 function tournamentDisplay(r){ return tournamentAnswers(r).join(' / '); }
 
+// Score the two team-guess boxes against the two answer teams, order
+// independent (the player can enter either team in either box). Each box is
+// marked correct if its value matches one of the two answer teams, but an
+// answer team can only be "claimed" by one box — so typing the same
+// (correct) name into both boxes only credits one of them, and a box can
+// only be marked correct for a team it actually matches.
+function scoreTeamGuesses(guess1, guess2, answer1, answer2){
+  const g1 = norm(guess1), g2 = norm(guess2);
+  const pool = [norm(answer1), norm(answer2)];
+  let box1Ok = false, box2Ok = false;
+
+  // Match each box to its own answer slot first, so a fully correct
+  // in-order guess isn't consumed by the cross-check below.
+  if(g1 === pool[0]){ box1Ok = true; pool[0] = null; }
+  if(g2 === pool[1]){ box2Ok = true; pool[1] = null; }
+  if(!box1Ok && pool.includes(g1)){ box1Ok = true; pool[pool.indexOf(g1)] = null; }
+  if(!box2Ok && pool.includes(g2)){ box2Ok = true; pool[pool.indexOf(g2)] = null; }
+
+  return { box1Ok, box2Ok };
+}
+
 function delay(ms){ return new Promise(res => setTimeout(res, ms)); }
 
 const FIELD_ORDER = ['team1', 'team2', 'year', 'tournament'];
@@ -874,11 +895,8 @@ form.addEventListener('submit', async (e)=>{
   }
 
   const r = ROUNDS[roundIndex];
-  const guessedTeams = [norm(vTeam1), norm(vTeam2)];
-  const answerTeams = [norm(r.team1), norm(r.team2)];
-  const teamsCorrect = guessedTeams.slice().sort().join('|') === answerTeams.slice().sort().join('|');
-  const team1Ok = guessedTeams.includes(answerTeams[0]);
-  const team2Ok = guessedTeams.includes(answerTeams[1]);
+  const { box1Ok: team1Ok, box2Ok: team2Ok } = scoreTeamGuesses(vTeam1, vTeam2, r.team1, r.team2);
+  const teamsCorrect = team1Ok && team2Ok;
   const yearOk  = norm(vYear) === norm(String(r.year));
   const tournamentOk = tournamentAnswers(r).some(t => norm(vTournament) === norm(t));
 
