@@ -546,7 +546,7 @@
         system clock, because the "current day" is computed from network
         time, not the device clock. See DAY_SCHEDULE / getCurrentDayNumber
         further down for the exact date math.
-      - `difficulty`: one of Bronze, Silver, Gold, Platinum, Diamond, Master,
+      - `difficulty`: one of Bronze, Silver, Gold, Platinum, Diamond, Masters,
         Grandmaster, Champion — shown as a colored badge, see RANK_COLORS below.
       - `image`: path to the puzzle image. Put your images in an "images"
         folder next to this HTML file and name them to match, e.g.
@@ -567,7 +567,7 @@
    ========================================================================= */
 const ROUNDS = [
   {
-    day: 1, difficulty: "Bronze",
+    day: 1, difficulty: "Silver",
     team1: "London Spitfire", team2: "Philadelphia Fusion",
     year: 2018, tournament: "Playoffs",
     image: "images/Day 1.png",
@@ -575,27 +575,31 @@ const ROUNDS = [
   },
   {
     day: 2, difficulty: "Gold",
-    team1: "San Francisco Shock", team2: "Vancouver Titans",
-    year: 2019, tournament: "Playoffs",
-    image: "images/Day 2.png"
+    team1: "London Spitfire", team2: "Los Angeles Gladiators",
+    year: 2018, tournament: "Playoffs",
+    image: "images/Day 2.png",
+    revealImage: "images/Day 2 Answer.png"
   },
   {
-    day: 3, difficulty: "Platinum",
-    team1: "Dallas Fuel", team2: "Shanghai Dragons",
-    year: 2022, tournament: "Summer Showdown",
-    image: "images/Day 3.png"
+    day: 3, difficulty: "Masters",
+    team1: "Toronto Ultra", team2: "ZETA DIVISION",
+    year: 2024, tournament: "Esports World Cup",
+    image: "images/Day 3.png",
+    revealImage: "images/Day 3 Answer.png"
   },
   {
-    day: 4, difficulty: "Diamond",
-    team1: "Team Falcons", team2: "Crazy Raccoon",
-    year: 2024, tournament: "World Finals",
-    image: "images/Day 4.png"
+    day: 4, difficulty: "Bronze",
+    team1: "Shanghai Dragons", team2: "Boston Uprising",
+    year: 2019, tournament: "Stage 1",
+    image: "images/Day 4.png",
+    revealImage: "images/Day 4 Answer.png"
   },
   {
-    day: 5, difficulty: "Master",
+    day: 5, difficulty: "Masters",
     team1: "Houston Outlaws", team2: "New York Excelsior",
     year: 2018, tournament: "Stage 2",
-    image: "images/Day 5.png"
+    image: "images/Day 5.png",
+    revealImage: "images/Day 5 Answer.png"
   }
 ];
 
@@ -619,7 +623,7 @@ const RANK_COLORS = {
   Gold: "#e8c547",
   Platinum: "#4cd3c6",
   Diamond: "#6fa8dc",
-  Master: "#e0a339",
+  Masters: "#e0a339",
   Grandmaster: "#e8734a",
   Champion: "#e6415b"
 };
