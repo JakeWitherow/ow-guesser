@@ -312,10 +312,16 @@
   .archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
   .archive-card{
     display:block;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
-    padding:14px;text-decoration:none;color:var(--text);
+    padding:14px;text-decoration:none;color:var(--text);position:relative;
     transition:border-color .15s ease, transform .12s ease;cursor:pointer;
   }
   .archive-card:hover{border-color:var(--cyan);transform:translateY(-2px);}
+  .ac-check{
+    position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;
+    background:var(--good);color:#04180c;font-weight:700;font-size:13px;
+    display:flex;align-items:center;justify-content:center;line-height:1;
+    box-shadow:0 0 8px rgba(61,220,132,.5);
+  }
   .ac-day{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:18px;margin-bottom:4px;}
   .ac-badge{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
   .ac-status{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;letter-spacing:.02em;}
@@ -1104,6 +1110,10 @@ function escapeHtml(s){
 
 function finishRound(win, gaveUp){
   const r = currentRound;
+  // Was this day already finished at some point before now (on release day
+  // OR in a previous archive attempt)? If so, this run is a replay and
+  // shouldn't move the needle on stats or overwrite the original record.
+  const isReplay = !!dailyProgress[r.day];
 
   // Fully reveal the image regardless of how many sections had been shown,
   // and swap in a clean reveal image if one's provided for this round.
@@ -1117,26 +1127,30 @@ function finishRound(win, gaveUp){
   resultEl.classList.add('show', win ? 'win' : 'lose');
   resultEl.classList.remove(win ? 'lose' : 'win');
   resultTitle.textContent = win ? `Identified in ${guesses.length}/${MAX_GUESSES} guesses` : (gaveUp ? 'Answer revealed' : 'Out of guesses');
-  resultBody.textContent = `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}.`;
+  resultBody.textContent = `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}.`
+    + (isReplay ? ' (Replay — doesn\u2019t count toward your stats.)' : '');
   submitBtn.disabled = true;
   giveUpBtn.disabled = true;
   mainShareBtn.disabled = false;
   form.querySelectorAll('input').forEach(i => i.disabled = true);
   updateGuessLabel();
-  updateStats(win, guesses.length, { isArchive: isArchiveAttempt, day: r.day });
 
-  if(!isArchiveAttempt){
+  if(!isReplay){
+    updateStats(win, guesses.length, { isArchive: isArchiveAttempt, day: r.day });
     dailyProgress[r.day] = {
       win, gaveUp: !!gaveUp, guessCount: guesses.length,
       guesses: guesses.map(g => ({...g})), finishedAt: Date.now()
     };
     saveDailyProgress();
+  }
+
+  if(!isArchiveAttempt){
     clearInProgress();
     lockedNote.style.display = 'block';
     lockedNoteBody.textContent = "You've already completed today's puzzle. Come back tomorrow for a new one, or explore past puzzles in the archive.";
   }
 
-  showModal(win, gaveUp);
+  showModal(win, gaveUp, isReplay);
 }
 
 nextBtn.addEventListener('click', ()=>{
@@ -1172,12 +1186,13 @@ function renderDistribution(highlightCount){
   }
 }
 
-function showModal(win, gaveUp){
+function showModal(win, gaveUp, isReplay){
   const r = currentRound;
   modalTitle.textContent = win ? 'Solved!' : (gaveUp ? 'Answer revealed' : 'Out of guesses');
-  modalSubtitle.textContent = win
+  modalSubtitle.textContent = (win
     ? `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`
-    : `The answer was ${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`;
+    : `The answer was ${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`)
+    + (isReplay ? ' — replay, doesn\u2019t count toward your stats' : '');
   document.getElementById('modalStatPlayed').textContent = stats.played;
   document.getElementById('modalStatWinPct').textContent = stats.wins;
   document.getElementById('modalStatStreak').textContent = stats.streak;
@@ -1467,10 +1482,14 @@ function showArchiveList(){
     } else {
       statusHtml = `<span class="ac-status ac-unplayed">Not played</span>`;
     }
+    // The checkmark marks "you've already completed this one" (win or
+    // lose, release day or archive) — replaying it won't affect your stats.
+    const checkHtml = rec ? `<div class="ac-check" title="Already completed — replays don't count toward your stats">&check;</div>` : '';
     const card = document.createElement('a');
     card.href = `#/archive/${r.day}`;
     card.className = 'archive-card';
     card.innerHTML = `
+      ${checkHtml}
       <div class="ac-day">Day ${r.day}</div>
       <div class="ac-badge" style="color:${RANK_COLORS[r.difficulty] || 'var(--muted)'}">${escapeHtml(r.difficulty || 'Unrated')}</div>
       ${statusHtml}
@@ -1492,6 +1511,7 @@ function renderReadOnlyCompleted(round, record, isArchive){
   boardFlash.className = 'board-flash';
   boardImage.style.backgroundImage = `url("${round.revealImage || round.image}")`;
   buildTiles();
+  revealOrder = [0,1,2,3,4,5]; // all tiles revealed — order is irrelevant here
   revealsShown = 6;
   applyReveals();
   renderPips();
