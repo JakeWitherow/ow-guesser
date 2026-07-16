@@ -216,6 +216,8 @@
   .btn-primary:hover{filter:brightness(1.08);}
   .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
   .btn-ghost:hover{color:var(--text);border-color:var(--cyan);}
+  .btn-danger{background:linear-gradient(90deg,var(--bad),#ff8a8a);color:#2a0505;}
+  .btn-danger:hover{filter:brightness(1.08);}
   button:disabled{opacity:.4;cursor:not-allowed;}
 
   /* ---------- Result banner ---------- */
@@ -513,7 +515,7 @@
       Guess the OWL / OWCS match hidden behind the broadcast frame.
     </p>
     <ul style="margin:0 0 18px;padding-left:18px;color:var(--text);font-size:13px;line-height:1.7;">
-      <li>Enter <strong>Team&nbsp;1</strong>, <strong>Team&nbsp;2</strong>, the <strong>Year</strong>, and the <strong>Tournament</strong>, then lock in your guess.</li>
+      <li>Enter <strong>Team&nbsp;1</strong>, <strong>Team&nbsp;2</strong>, the <strong>Year</strong>, and the <strong>Tournament</strong>, then lock in your guess. Every answer must be chosen from its dropdown suggestions — free text on its own won't be accepted.</li>
       <li>Only 1/6 of the image shows at first. Each guess reveals another section.</li>
       <li>You get <strong>6 guesses total</strong> — the last one is made against the fully revealed image.</li>
       <li>Correct fields turn <span style="color:var(--good);font-weight:600;">green</span>, incorrect ones turn <span style="color:var(--bad);font-weight:600;">red</span> — reuse that information on your next guess.</li>
@@ -522,6 +524,19 @@
     </ul>
     <div class="modal-actions">
       <button type="button" class="btn-primary" id="howtoGotIt" style="flex:1;">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm reveal-answer modal -->
+<div class="modal-overlay" id="confirmRevealOverlay">
+  <div class="modal" style="max-width:340px;">
+    <button type="button" class="modal-close" id="confirmRevealClose" aria-label="Close">&times;</button>
+    <h2>Reveal the answer?</h2>
+    <p class="modal-subtitle" id="confirmRevealBody">This ends today's attempt straight away and counts as an incomplete puzzle — you won't be able to try again until it's in the archive.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn-ghost" id="cancelRevealBtn" style="flex:1;">Cancel</button>
+      <button type="button" class="btn-danger" id="confirmRevealBtn" style="flex:1;">Reveal answer</button>
     </div>
   </div>
 </div>
@@ -730,6 +745,11 @@ const howtoBtn = document.getElementById('howtoBtn');
 const howtoOverlay = document.getElementById('howtoOverlay');
 const howtoClose = document.getElementById('howtoClose');
 const howtoGotIt = document.getElementById('howtoGotIt');
+const confirmRevealOverlay = document.getElementById('confirmRevealOverlay');
+const confirmRevealBody = document.getElementById('confirmRevealBody');
+const confirmRevealBtn = document.getElementById('confirmRevealBtn');
+const cancelRevealBtn = document.getElementById('cancelRevealBtn');
+const confirmRevealClose = document.getElementById('confirmRevealClose');
 
 const titleLink = document.getElementById('titleLink');
 const archiveNavBtn = document.getElementById('archiveNavBtn');
@@ -921,6 +941,7 @@ function startRound(round, isArchive){
   resultEl.classList.remove('show','win','lose');
   historyList.innerHTML = '';
   hideModal();
+  hideConfirmReveal();
   mainShareBtn.disabled = true;
   mainShareBtn.textContent = 'Share result';
   modalShareBtn.textContent = 'Share result';
@@ -1030,17 +1051,47 @@ form.addEventListener('submit', async (e)=>{
   if(over) return;
   hideAllAutocompletes();
 
-  const vTeam1 = document.getElementById('team1').value;
-  const vTeam2 = document.getElementById('team2').value;
-  const vYear  = document.getElementById('year').value;
-  const vTournament = document.getElementById('tournament').value;
+  const vTeam1Raw = document.getElementById('team1').value;
+  const vTeam2Raw = document.getElementById('team2').value;
+  const vYearRaw  = document.getElementById('year').value;
+  const vTournamentRaw = document.getElementById('tournament').value;
 
-  if(!vTeam1 || !vTeam2 || !vYear || !vTournament){
+  if(!vTeam1Raw || !vTeam2Raw || !vYearRaw || !vTournamentRaw){
     resultTitle.textContent = 'Fill in every field';
     resultBody.textContent = 'All four fields need an answer before you lock in a guess.';
     resultEl.className = 'result show lose';
     return;
   }
+
+  // Every answer has to be an exact option from its own dropdown list —
+  // free text that isn't one of the suggestions is rejected here, before it
+  // ever counts as a guess.
+  const FIELD_SOURCES = { team1: TEAMS, team2: TEAMS, year: YEARS, tournament: TOURNAMENTS };
+  let hasInvalid = false;
+  Object.keys(FIELD_SOURCES).forEach(id=>{
+    const input = document.getElementById(id);
+    const fieldEl = input.closest('.field');
+    const match = FIELD_SOURCES[id].find(opt => norm(opt) === norm(input.value));
+    if(!match){
+      hasInvalid = true;
+      fieldEl.classList.remove('correct');
+      fieldEl.classList.add('wrong');
+      document.getElementById('hint'+capitalize(id)).textContent = 'Pick an option from the dropdown';
+    } else {
+      input.value = match; // snap to the dropdown's exact casing/wording
+    }
+  });
+  if(hasInvalid){
+    resultTitle.textContent = 'Choose from the dropdown';
+    resultBody.textContent = 'Every answer has to be selected from its dropdown list \u2014 free text on its own isn\u2019t accepted.';
+    resultEl.className = 'result show lose';
+    return;
+  }
+
+  const vTeam1 = document.getElementById('team1').value;
+  const vTeam2 = document.getElementById('team2').value;
+  const vYear  = document.getElementById('year').value;
+  const vTournament = document.getElementById('tournament').value;
 
   const r = currentRound;
   const { box1Ok: team1Ok, box2Ok: team2Ok } = scoreTeamGuesses(vTeam1, vTeam2, r.team1, r.team2);
@@ -1091,9 +1142,28 @@ form.addEventListener('submit', async (e)=>{
 
 giveUpBtn.addEventListener('click', ()=>{
   if(over) return;
+  confirmRevealBody.textContent = isArchiveAttempt
+    ? "This ends this archive attempt and shows the answer. You can always come back and try this puzzle again."
+    : "This ends today's attempt straight away and counts as an incomplete puzzle — you won't be able to try again until it's in the archive.";
+  confirmRevealOverlay.classList.add('show');
+});
+
+function hideConfirmReveal(){ confirmRevealOverlay.classList.remove('show'); }
+
+confirmRevealBtn.addEventListener('click', ()=>{
+  hideConfirmReveal();
+  if(over) return;
   hideAllAutocompletes();
   over = true;
   finishRound(false, true);
+});
+cancelRevealBtn.addEventListener('click', hideConfirmReveal);
+confirmRevealClose.addEventListener('click', hideConfirmReveal);
+confirmRevealOverlay.addEventListener('click', (e)=>{
+  if(e.target === confirmRevealOverlay) hideConfirmReveal();
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && confirmRevealOverlay.classList.contains('show')) hideConfirmReveal();
 });
 
 function renderHistory(){
