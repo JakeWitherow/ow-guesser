@@ -1,0 +1,18 @@
+name = "owguessr-stats"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Created with: npx wrangler d1 create owguessr-db
+# Paste the database_id it prints below.
+[[d1_databases]]
+binding = "DB"
+database_name = "owguessr-db"
+database_id = "df613765-a768-4dd7-9723-f0f632b14285"
+
+# Set the real values with:
+#   npx wrangler secret put STATS_TOKEN
+#   npx wrangler secret put ALLOWED_ORIGIN
+# STATS_TOKEN protects the /api/stats dashboard endpoint.
+# ALLOWED_ORIGIN should be your game's real URL, e.g.
+# https://jakewitherow.github.io — used for CORS + a lightweight
+# same-origin check on /api/event so randoms can't easily spam your DB.
