@@ -644,6 +644,30 @@ const ROUNDS = [
    ========================================================================= */
 const DAY2_LOCAL_DATE = new Date(2026, 6, 18); // July 18, 2026 (month is 0-indexed)
 
+/* =========================================================================
+   STATS BACKEND — paste your deployed Worker URL here once you've followed
+   backend/README.md (leave as '' to disable — the game still works fine
+   without it, it just won't feed the aggregate stats dashboard).
+   ========================================================================= */
+const BACKEND_URL = ''; // e.g. 'https://owguessr-stats.yoursubdomain.workers.dev'
+
+// Fire-and-forget: sends one event per completed puzzle attempt that counts
+// toward stats (see the isReplay check in finishRound). Never blocks the UI
+// and silently does nothing if BACKEND_URL isn't set or the request fails —
+// this is best-effort analytics, not something gameplay should depend on.
+function sendStatsEvent(payload){
+  if(!BACKEND_URL) return;
+  try{
+    fetch(`${BACKEND_URL.replace(/\/$/,'')}/api/event`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(()=>{ /* best-effort — ignore network errors */ });
+  }catch(e){ /* ignore */ }
+}
+
+
 // Overwatch competitive rank colors, used to tint the difficulty badge.
 // Approximate — tweak to taste / to match the current in-game palette.
 const RANK_COLORS = {
@@ -955,6 +979,12 @@ function startRound(round, isArchive){
   updateGuessLabel();
 
   if(!isArchiveAttempt) clearInProgress();
+
+  gtag('event', 'puzzle_start', {
+    day: r.day,
+    difficulty: r.difficulty || 'Unrated',
+    is_archive: isArchiveAttempt,
+  });
 }
 
 function updateGuessLabel(){
@@ -1223,6 +1253,16 @@ function finishRound(win, gaveUp){
   form.querySelectorAll('input').forEach(i => i.disabled = true);
   updateGuessLabel();
 
+  gtag('event', 'puzzle_complete', {
+    day: r.day,
+    difficulty: r.difficulty || 'Unrated',
+    is_archive: isArchiveAttempt,
+    is_replay: isReplay,
+    win: win,
+    gave_up: !!gaveUp,
+    guess_count: guesses.length,
+  });
+
   if(!isReplay){
     updateStats(win, guesses.length, { isArchive: isArchiveAttempt, day: r.day });
     dailyProgress[r.day] = {
@@ -1230,6 +1270,15 @@ function finishRound(win, gaveUp){
       guesses: guesses.map(g => ({...g})), finishedAt: Date.now()
     };
     saveDailyProgress();
+    sendStatsEvent({
+      day: r.day,
+      difficulty: r.difficulty || null,
+      isArchive: isArchiveAttempt,
+      win,
+      gaveUp: !!gaveUp,
+      guessCount: guesses.length,
+      streak: (!isArchiveAttempt && win) ? stats.streak : null,
+    });
   }
 
   if(!isArchiveAttempt){
@@ -1322,6 +1371,7 @@ function buildShareText(){
 async function shareResult(){
   const text = buildShareText();
   const setLabel = (label)=>{ mainShareBtn.textContent = label; modalShareBtn.textContent = label; };
+  gtag('event', 'share_result', { day: currentRound ? currentRound.day : null, is_archive: isArchiveAttempt });
   try{
     await navigator.clipboard.writeText(text);
     setLabel('Copied!');
@@ -1552,6 +1602,7 @@ function showArchivePuzzle(day){
 function showArchiveList(){
   playSection.style.display = 'none';
   archiveListSection.style.display = '';
+  gtag('event', 'archive_view', {});
 
   const pastDays = ROUNDS.filter(r => r.day < currentDay).sort((a,b) => b.day - a.day);
   archiveGrid.innerHTML = '';
