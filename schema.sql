@@ -17,3 +17,14 @@ CREATE TABLE IF NOT EXISTS plays (
 
 CREATE INDEX IF NOT EXISTS idx_plays_day ON plays(day);
 CREATE INDEX IF NOT EXISTS idx_plays_created_at ON plays(created_at);
+
+-- Simple per-IP rate limiter for /api/guess (and reusable elsewhere), so
+-- that scripting a field-by-field brute-force of a day's answer isn't
+-- practical. Not a security boundary on its own — paired with the
+-- answers no longer being shipped to the client at all.
+CREATE TABLE IF NOT EXISTS rate_limit (
+  ip           TEXT PRIMARY KEY,
+  window_start INTEGER NOT NULL,
+  count        INTEGER NOT NULL
+);
+

@@ -543,113 +543,83 @@
 
 <script>
 /* =========================================================================
-   1. MATCH DATABASE — replace `image` with real screenshots you have rights
-      to use, and add as many rounds as you like. `tournament` is free text
-      so you can match your own league's terminology exactly — see the
-      TOURNAMENTS list below for the built-in autocomplete options.
+   PUZZLE DATA & ANSWER-CHECKING NOW LIVE ON THE BACKEND, NOT HERE.
+
+   Previously this file had a `ROUNDS` array with every day's real answer
+   sitting in plain sight — anyone could open dev tools and read every
+   future puzzle's answer straight out of the page source. That data (and
+   the day-schedule math, and the guess-checking logic) has moved to the
+   Cloudflare Worker in backend/src/index.js, which only ever tells this
+   client:
+     - metadata for a day that has actually unlocked (difficulty/images),
+       never for a day that hasn't yet,
+     - true/false per guessed field, never the answer itself,
+     - the real answer, but only for a day that's already unlocked, and
+       only once you ask for it (i.e. once the puzzle is actually over).
+
+   To add a new puzzle day, edit the `ROUNDS` array in
+   backend/src/index.js — see the comment there — not here. This file no
+   longer has anywhere to put answer data even if you wanted to.
+
+   BACKEND_URL is now required for the game to run at all (not just for
+   stats) — see backend/README.md for how to deploy the Worker.
    ========================================================================= */
-/* =========================================================================
-   1. MATCH DATABASE
-      - `day`: the puzzle's day number. Day numbers map onto real calendar
-        dates via DAY_SCHEDULE below — Day 1 is "live" from whenever you
-        deploy the site until the DAY2 cutover date, Day 2 is live on that
-        cutover date, and every day after that is live on the next calendar
-        day (in each visitor's own local timezone). To add a new day, just
-        append a new entry here with the next sequential day number — it
-        will automatically go live on its corresponding calendar date and
-        nobody can see it (or any later day) early, even by changing their
-        system clock, because the "current day" is computed from network
-        time, not the device clock. See DAY_SCHEDULE / getCurrentDayNumber
-        further down for the exact date math.
-      - `difficulty`: one of Bronze, Silver, Gold, Platinum, Diamond, Masters,
-        Grandmaster, Champion — shown as a colored badge, see RANK_COLORS below.
-      - `image`: path to the puzzle image. Put your images in an "images"
-        folder next to this HTML file and name them to match, e.g.
-        images/Day 1.png — or use a full URL if you're hosting elsewhere.
-      - `revealImage` (optional): a different, fully-clear image shown once
-        the round ends (in place of the puzzle image). Leave it out and the
-        puzzle image itself will just be shown with all tiles cleared.
-      - `tournament` should be an exact string from the TOURNAMENTS list
-        below. If more than one answer should count as correct (e.g. a
-        Stage that also counted as that Stage's Title Matches), give an
-        array instead of a single string, like:
-          tournament: ["Stage 2", "Stage 2 Title Matches"]
-        A guess is marked correct if it exactly matches ANY entry in the
-        array. The player only ever submits one tournament guess at a
-        time — this just means several different answers can satisfy it.
-        The first entry in the array is used as the "answer" text shown
-        in the result banner, share text, etc.
-   ========================================================================= */
-const ROUNDS = [
-  {
-    day: 1, difficulty: "Silver",
-    team1: "London Spitfire", team2: "Philadelphia Fusion",
-    year: 2018, tournament: "Playoffs",
-    image: "images/Day 1.png",
-    revealImage: "images/Day 1 Answer.png"
-  },
-  {
-    day: 2, difficulty: "Gold",
-    team1: "London Spitfire", team2: "Los Angeles Gladiators",
-    year: 2018, tournament: "Playoffs",
-    image: "images/Day 2.png",
-    revealImage: "images/Day 2 Answer.png"
-  },
-  {
-    day: 3, difficulty: "Masters",
-    team1: "Toronto Ultra", team2: "ZETA DIVISION",
-    year: 2024, tournament: "Esports World Cup",
-    image: "images/Day 3.png",
-    revealImage: "images/Day 3 Answer.png"
-  },
-  {
-    day: 4, difficulty: "Bronze",
-    team1: "Shanghai Dragons", team2: "Boston Uprising",
-    year: 2019, tournament: "Stage 1",
-    image: "images/Day 4.png",
-    revealImage: "images/Day 4 Answer.png"
-  },
-  {
-    day: 5, difficulty: "Grandmaster",
-    team1: "London Spitfire", team2: "Atlanta Reign",
-    year: 2023, tournament: "Playoffs",
-    image: "images/Day 5.png",
-    revealImage: "images/Day 5 Answer.png"
-  },
-    {
-    day: 6, difficulty: "Champion",
-    team1: "Toronto Defiant", team2: "Washington Justice",
-    year: 2021, tournament: ["Countdown Cup Qualifiers", "Stage 4"],
-    image: "images/Day 6.png",
-    revealImage: "images/Day 6 Answer.png"
-  },
-  {
-    day: 7, difficulty: "Diamond",
-    team1: "Crazy Raccoont", team2: "Team Falcons",
-    year: 2024, tournament: ["World Finals", "Playoffs"],
-    image: "images/Day 7.png",
-    revealImage: "images/Day 7 Answer.png"
+const BACKEND_URL = ''; // e.g. 'https://owguessr-stats.yoursubdomain.workers.dev'
+
+// The visitor's own IANA timezone (e.g. "Europe/London") — just a place
+// name, not a manipulable clock reading. The server uses its own trusted
+// clock to work out the current date in that timezone, so each player
+// still gets their new puzzle at their own local midnight without the
+// client ever being trusted about "what time it is".
+const TZ = (()=>{
+  try{ return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; }
+  catch(e){ return 'UTC'; }
+})();
+
+async function apiGet(path){
+  const res = await fetch(`${BACKEND_URL.replace(/\/$/,'')}${path}`, { cache: 'no-store' });
+  if(!res.ok){
+    const err = new Error('api error ' + res.status);
+    err.status = res.status;
+    throw err;
   }
-];
+  return res.json();
+}
 
-/* =========================================================================
-   DAY SCHEDULE — controls which day number is "live" on any given date.
-   - Day 1 is live from the moment the site goes up until DAY2_LOCAL_DATE.
-   - Day 2 goes live on DAY2_LOCAL_DATE itself.
-   - Day 3, 4, 5... each go live exactly one calendar day after the
-     previous one, forever — no further config needed as you add rounds.
-   All of this is evaluated in the VISITOR'S OWN local calendar date, using
-   trusted network time (see getTrustedNow) rather than their device clock,
-   so it can't be skipped ahead by changing a system clock.
-   ========================================================================= */
-const DAY2_LOCAL_DATE = new Date(2026, 6, 18); // July 18, 2026 (month is 0-indexed)
+// Metadata (difficulty/images) for a given day, or today's if `day` is
+// omitted. Throws (status 403) if that day hasn't unlocked yet.
+async function fetchPuzzleMeta(day){
+  const q = day ? `&day=${encodeURIComponent(day)}` : '';
+  return apiGet(`/api/puzzle?tz=${encodeURIComponent(TZ)}${q}`);
+}
 
-/* =========================================================================
-   STATS BACKEND — paste your deployed Worker URL here once you've followed
-   backend/README.md (leave as '' to disable — the game still works fine
-   without it, it just won't feed the aggregate stats dashboard).
-   ========================================================================= */
-const BACKEND_URL = 'https://owguessr-stats.owguessr.workers.dev'; // e.g. 'https://owguessr-stats.yoursubdomain.workers.dev'
+// Metadata for every day that's already unlocked, for the archive list.
+async function fetchArchiveDays(){
+  return apiGet(`/api/days?tz=${encodeURIComponent(TZ)}`);
+}
+
+// Checks one guess against the real answer server-side. Returns booleans
+// only — the answer itself never comes back from this call.
+async function submitGuessToServer(day, vTeam1, vTeam2, vYear, vTournament){
+  const res = await fetch(`${BACKEND_URL.replace(/\/$/,'')}/api/guess`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ day, tz: TZ, team1: vTeam1, team2: vTeam2, year: vYear, tournament: vTournament }),
+  });
+  if(!res.ok){
+    const err = new Error('guess api error ' + res.status);
+    err.status = res.status;
+    throw err;
+  }
+  return res.json();
+}
+
+// The real answer for a day — only ever fetched once that day's puzzle is
+// actually finished (win, loss, or reveal), and only succeeds for a day
+// that's already unlocked.
+async function fetchAnswer(day){
+  return apiGet(`/api/answer?day=${encodeURIComponent(day)}&tz=${encodeURIComponent(TZ)}`);
+}
 
 // Fire-and-forget: sends one event per completed puzzle attempt that counts
 // toward stats (see the isReplay check in finishRound). Never blocks the UI
@@ -733,7 +703,8 @@ const TOURNAMENTS = [
 
 /* ---------------- game state ---------------- */
 const MAX_GUESSES = 6;
-let currentRound = null;   // the round object currently loaded into the play UI
+let currentRound = null;   // metadata only (day/difficulty/images) — no answer fields
+let currentAnswer = null;  // populated only once a round finishes, via fetchAnswer()
 let isArchiveAttempt = false; // true when the loaded round is being played from the archive
 let currentDay = 1;        // trusted current day number, set once at boot
 let revealOrder = [];
@@ -942,6 +913,7 @@ function buildTiles(){
 
 function startRound(round, isArchive){
   currentRound = round;
+  currentAnswer = null;
   isArchiveAttempt = !!isArchive;
   const r = round;
   form.style.display = '';
@@ -1017,34 +989,10 @@ function clearFieldStates(){
 }
 function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
 
+// Still used client-side for the "must pick from the dropdown" check —
+// that's just validating against the option lists (TEAMS/YEARS/TOURNAMENTS),
+// not an answer, so it's fine to keep here.
 function norm(s){ return (s||'').trim().toLowerCase(); }
-
-// A round's `tournament` can be a single string or an array of acceptable
-// strings (when more than one answer should count as correct). These
-// helpers let the rest of the code treat it uniformly.
-function tournamentAnswers(r){ return Array.isArray(r.tournament) ? r.tournament : [r.tournament]; }
-function tournamentDisplay(r){ return tournamentAnswers(r).join(' / '); }
-
-// Score the two team-guess boxes against the two answer teams, order
-// independent (the player can enter either team in either box). Each box is
-// marked correct if its value matches one of the two answer teams, but an
-// answer team can only be "claimed" by one box — so typing the same
-// (correct) name into both boxes only credits one of them, and a box can
-// only be marked correct for a team it actually matches.
-function scoreTeamGuesses(guess1, guess2, answer1, answer2){
-  const g1 = norm(guess1), g2 = norm(guess2);
-  const pool = [norm(answer1), norm(answer2)];
-  let box1Ok = false, box2Ok = false;
-
-  // Match each box to its own answer slot first, so a fully correct
-  // in-order guess isn't consumed by the cross-check below.
-  if(g1 === pool[0]){ box1Ok = true; pool[0] = null; }
-  if(g2 === pool[1]){ box2Ok = true; pool[1] = null; }
-  if(!box1Ok && pool.includes(g1)){ box1Ok = true; pool[pool.indexOf(g1)] = null; }
-  if(!box2Ok && pool.includes(g2)){ box2Ok = true; pool[pool.indexOf(g2)] = null; }
-
-  return { box1Ok, box2Ok };
-}
 
 function delay(ms){ return new Promise(res => setTimeout(res, ms)); }
 
@@ -1123,19 +1071,30 @@ form.addEventListener('submit', async (e)=>{
   const vYear  = document.getElementById('year').value;
   const vTournament = document.getElementById('tournament').value;
 
-  const r = currentRound;
-  const { box1Ok: team1Ok, box2Ok: team2Ok } = scoreTeamGuesses(vTeam1, vTeam2, r.team1, r.team2);
-  const teamsCorrect = team1Ok && team2Ok;
-  const yearOk  = norm(vYear) === norm(String(r.year));
-  const tournamentOk = tournamentAnswers(r).some(t => norm(vTournament) === norm(t));
-
-  const fieldChecks = {team1:team1Ok, team2:team2Ok, year:yearOk, tournament:tournamentOk};
-  const allCorrect = teamsCorrect && yearOk && tournamentOk;
-  const isFinalGuess = guesses.length + 1 >= MAX_GUESSES;
-
-  // Lock the form while the reveal animation plays so a second guess can't sneak in.
+  // Lock the form while we check the guess so a second submit can't sneak in.
   submitBtn.disabled = true;
   giveUpBtn.disabled = true;
+
+  let checkResult;
+  try{
+    checkResult = await submitGuessToServer(currentRound.day, vTeam1, vTeam2, vYear, vTournament);
+  }catch(err){
+    resultTitle.textContent = 'Could not check that guess';
+    resultBody.textContent = err.status === 429
+      ? 'You\u2019re guessing a bit fast \u2014 wait a moment and try again.'
+      : 'Couldn\u2019t reach the puzzle server. Check your connection and try again.';
+    resultEl.className = 'result show lose';
+    submitBtn.disabled = false;
+    giveUpBtn.disabled = false;
+    return;
+  }
+
+  const fieldChecks = {
+    team1: checkResult.team1Ok, team2: checkResult.team2Ok,
+    year: checkResult.yearOk, tournament: checkResult.tournamentOk,
+  };
+  const allCorrect = checkResult.allCorrect;
+  const isFinalGuess = guesses.length + 1 >= MAX_GUESSES;
 
   await revealFieldsSequentially(fieldChecks);
 
@@ -1226,12 +1185,30 @@ function escapeHtml(s){
   return div.innerHTML;
 }
 
-function finishRound(win, gaveUp){
+async function finishRound(win, gaveUp){
   const r = currentRound;
   // Was this day already finished at some point before now (on release day
   // OR in a previous archive attempt)? If so, this run is a replay and
   // shouldn't move the needle on stats or overwrite the original record.
   const isReplay = !!dailyProgress[r.day];
+
+  submitBtn.disabled = true;
+  giveUpBtn.disabled = true;
+  form.querySelectorAll('input').forEach(i => i.disabled = true);
+  updateGuessLabel();
+
+  // The real answer only ever comes down once the puzzle is actually over,
+  // and only for a day that's already unlocked server-side.
+  let answer;
+  try{
+    answer = await fetchAnswer(r.day);
+  }catch(err){
+    resultTitle.textContent = win ? 'Solved!' : (gaveUp ? 'Answer revealed' : 'Out of guesses');
+    resultBody.textContent = 'Couldn\u2019t reach the puzzle server to load the answer details — your result still counts, just refresh to see the full reveal.';
+    resultEl.classList.add('show', win ? 'win' : 'lose');
+    return;
+  }
+  currentAnswer = answer;
 
   // Fully reveal the image regardless of how many sections had been shown,
   // and swap in a clean reveal image if one's provided for this round.
@@ -1239,19 +1216,15 @@ function finishRound(win, gaveUp){
   applyReveals();
   renderPips();
   revealCountEl.textContent = 6;
-  boardImage.style.backgroundImage = `url("${r.revealImage || r.image}")`;
+  boardImage.style.backgroundImage = `url("${answer.revealImage}")`;
   board.classList.add(win ? 'complete-win' : 'complete-lose');
 
   resultEl.classList.add('show', win ? 'win' : 'lose');
   resultEl.classList.remove(win ? 'lose' : 'win');
   resultTitle.textContent = win ? `Identified in ${guesses.length}/${MAX_GUESSES} guesses` : (gaveUp ? 'Answer revealed' : 'Out of guesses');
-  resultBody.textContent = `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}.`
+  resultBody.textContent = `${answer.team1} vs ${answer.team2} — ${answer.year}, ${answer.tournament}.`
     + (isReplay ? ' (Replay — doesn\u2019t count toward your stats.)' : '');
-  submitBtn.disabled = true;
-  giveUpBtn.disabled = true;
   mainShareBtn.disabled = false;
-  form.querySelectorAll('input').forEach(i => i.disabled = true);
-  updateGuessLabel();
 
   gtag('event', 'puzzle_complete', {
     day: r.day,
@@ -1324,11 +1297,11 @@ function renderDistribution(highlightCount){
 }
 
 function showModal(win, gaveUp, isReplay){
-  const r = currentRound;
+  const a = currentAnswer;
   modalTitle.textContent = win ? 'Solved!' : (gaveUp ? 'Answer revealed' : 'Out of guesses');
   modalSubtitle.textContent = (win
-    ? `${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`
-    : `The answer was ${r.team1} vs ${r.team2} — ${r.year}, ${tournamentDisplay(r)}`)
+    ? `${a.team1} vs ${a.team2} — ${a.year}, ${a.tournament}`
+    : `The answer was ${a.team1} vs ${a.team2} — ${a.year}, ${a.tournament}`)
     + (isReplay ? ' — replay, doesn\u2019t count toward your stats' : '');
   document.getElementById('modalStatPlayed').textContent = stats.played;
   document.getElementById('modalStatWinPct').textContent = stats.wins;
@@ -1484,72 +1457,12 @@ function restoreInProgress(saved){
   updateGuessLabel();
 }
 
-/* ---------------- trusted ("can't just change your clock") time ----------------
-   A static site has no server to ask what time it "really" is, so the closest
-   practical substitute is asking a neutral third-party time service over
-   HTTPS and measuring the gap between that and the device clock. Changing
-   the device clock has no effect because we re-derive the gap from the
-   network every time the page loads, rather than trusting the device clock
-   on its own. If every network source is unreachable (offline, blocked),
-   this falls back to the last known-good gap, and only as an absolute last
-   resort to the device clock itself. */
-const TIME_OFFSET_KEY = 'owguessr_time_offset';
-const TIME_SOURCES = [
-  { url: 'https://worldtimeapi.org/api/timezone/Etc/UTC', parse: j => new Date(j.unixtime * 1000) },
-  { url: 'https://timeapi.io/api/Time/current/zone?timeZone=UTC', parse: j => new Date(j.dateTime + 'Z') }
-];
-
-async function fetchNetworkTime(timeoutMs){
-  for(const src of TIME_SOURCES){
-    try{
-      const controller = new AbortController();
-      const timer = setTimeout(()=>controller.abort(), timeoutMs);
-      const res = await fetch(src.url, { signal: controller.signal, cache: 'no-store' });
-      clearTimeout(timer);
-      if(!res.ok) continue;
-      const json = await res.json();
-      const serverDate = src.parse(json);
-      if(serverDate && !isNaN(serverDate.getTime())) return serverDate;
-    }catch(e){ /* try the next source */ }
-  }
-  return null;
-}
-
-async function getTrustedNow(){
-  const localBefore = Date.now();
-  const serverDate = await fetchNetworkTime(3000);
-  if(serverDate){
-    const localAfter = Date.now();
-    const roundTrip = localAfter - localBefore;
-    const adjustedServerMs = serverDate.getTime() + Math.round(roundTrip / 2); // rough latency correction
-    const offset = adjustedServerMs - localAfter;
-    try{ localStorage.setItem(TIME_OFFSET_KEY, JSON.stringify({ offset, cachedAt: localAfter })); }catch(e){ /* ignore */ }
-    return new Date(Date.now() + offset);
-  }
-  // Network unreachable — fall back to the last offset we successfully measured.
-  try{
-    const cached = JSON.parse(localStorage.getItem(TIME_OFFSET_KEY));
-    if(cached && typeof cached.offset === 'number') return new Date(Date.now() + cached.offset);
-  }catch(e){ /* ignore */ }
-  // Nothing to go on at all (e.g. first-ever visit, offline) — device clock it is.
-  return new Date();
-}
-
-/* ---------------- day scheduling ---------------- */
-function localMidnight(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
-function daysBetween(a, b){ return Math.round((localMidnight(b) - localMidnight(a)) / 86400000); }
-
-function getCurrentDayNumber(trustedNow){
-  let day = (localMidnight(trustedNow) < localMidnight(DAY2_LOCAL_DATE))
-    ? 1
-    : 2 + daysBetween(DAY2_LOCAL_DATE, trustedNow);
-  // Clamp to whatever's actually been published, so the schedule never
-  // outruns the ROUNDS array if a new day's puzzle hasn't been added yet.
-  const maxDefined = Math.max(...ROUNDS.map(r => r.day));
-  return Math.min(day, maxDefined);
-}
-
-function findRoundByDay(day){ return ROUNDS.find(r => r.day === day); }
+/* ---------------- day scheduling ----------------
+   The current day number and per-day metadata now come entirely from the
+   Worker (see backend/src/index.js) — there's no local clock-trust or date
+   math here anymore. The server already returns `currentDay` alongside
+   puzzle metadata, so it's just read off each response rather than
+   computed client-side. */
 
 /* ---------------- routing (hash-based single page app: today's puzzle,
    the archive list, or a specific archived puzzle) ---------------- */
@@ -1567,51 +1480,86 @@ function route(){
   }
 }
 
-function showToday(){
+function showBackendError(){
+  bootLoading.style.display = 'none';
+  playSection.style.display = 'none';
+  archiveListSection.style.display = 'none';
+  lockedNote.style.display = 'block';
+  lockedNote.style.textAlign = 'center';
+  document.querySelector('.stats').insertAdjacentElement('afterend', lockedNote);
+  document.querySelector('#lockedNote h3').textContent = 'Couldn\u2019t reach the puzzle server';
+  lockedNoteBody.textContent = 'Check your connection and refresh the page. If this keeps happening, the game\u2019s backend may be temporarily down.';
+}
+
+async function showToday(){
   archiveListSection.style.display = 'none';
   playSection.style.display = '';
   archiveBackBar.style.display = 'none';
 
-  const round = findRoundByDay(currentDay);
-  if(!round) return; // shouldn't happen as long as Day 1 exists in ROUNDS
+  let meta;
+  try{
+    meta = await fetchPuzzleMeta(); // no day param = "today" for this visitor's tz
+  }catch(err){
+    showBackendError();
+    return;
+  }
+  currentDay = meta.currentDay;
 
   const existing = dailyProgress[currentDay];
   if(existing){
-    renderReadOnlyCompleted(round, existing, false);
+    await renderReadOnlyCompleted(meta, existing, false);
     return;
   }
 
   const saved = loadInProgress();
-  startRound(round, false);
+  startRound(meta, false);
   if(saved && saved.day === currentDay && saved.guesses && saved.guesses.length){
     restoreInProgress(saved);
   }
   maybeShowHowtoOnFirstAttempt();
 }
 
-function showArchivePuzzle(day){
-  const round = findRoundByDay(day);
-  if(!round || day >= currentDay){ location.hash = '#/archive'; return; }
+async function showArchivePuzzle(day){
+  let meta;
+  try{
+    meta = await fetchPuzzleMeta(day);
+  }catch(err){
+    // Either not unlocked yet (403) or a real network problem — either way,
+    // the archive list is the safest place to land.
+    location.hash = '#/archive';
+    return;
+  }
+  currentDay = meta.currentDay;
   archiveListSection.style.display = 'none';
   playSection.style.display = '';
   archiveBackBar.style.display = '';
-  startRound(round, true);
+  startRound(meta, true);
   maybeShowHowtoOnFirstAttempt();
 }
 
-function showArchiveList(){
+async function showArchiveList(){
   playSection.style.display = 'none';
   archiveListSection.style.display = '';
   gtag('event', 'archive_view', {});
 
-  const pastDays = ROUNDS.filter(r => r.day < currentDay).sort((a,b) => b.day - a.day);
+  let data;
+  try{
+    data = await fetchArchiveDays();
+  }catch(err){
+    archiveGrid.innerHTML = '';
+    archiveEmpty.style.display = 'block';
+    archiveEmpty.textContent = 'Couldn\u2019t reach the puzzle server \u2014 check your connection and try again.';
+    return;
+  }
+  currentDay = data.currentDay;
+
   archiveGrid.innerHTML = '';
-  if(pastDays.length === 0){
+  if(data.days.length === 0){
     archiveEmpty.style.display = 'block';
     return;
   }
   archiveEmpty.style.display = 'none';
-  pastDays.forEach(r=>{
+  data.days.forEach(r=>{
     const rec = dailyProgress[r.day];
     let statusHtml;
     if(rec){
@@ -1639,16 +1587,27 @@ function showArchiveList(){
 
 /* Renders the fully-revealed, read-only state for a puzzle that's already
    been completed on its release day (locks out further attempts until it
-   rolls into the archive tomorrow). */
-function renderReadOnlyCompleted(round, record, isArchive){
-  currentRound = round;
+   rolls into the archive tomorrow). Fetches the real answer from the
+   server since the client never holds onto it otherwise. */
+async function renderReadOnlyCompleted(meta, record, isArchive){
+  currentRound = meta;
   isArchiveAttempt = isArchive;
   guesses = (record.guesses || []).map(g => ({...g}));
   solved = record.win;
   over = true;
 
+  let answer;
+  try{
+    answer = await fetchAnswer(meta.day);
+  }catch(err){
+    // Fall back to at least showing the puzzle image and result banner
+    // without the answer text, rather than a blank/broken page.
+    answer = { team1: '—', team2: '—', year: '—', tournament: '—', revealImage: meta.revealImage || meta.image };
+  }
+  currentAnswer = answer;
+
   boardFlash.className = 'board-flash';
-  boardImage.style.backgroundImage = `url("${round.revealImage || round.image}")`;
+  boardImage.style.backgroundImage = `url("${answer.revealImage}")`;
   buildTiles();
   revealOrder = [0,1,2,3,4,5]; // all tiles revealed — order is irrelevant here
   revealsShown = 6;
@@ -1658,9 +1617,9 @@ function renderReadOnlyCompleted(round, record, isArchive){
   board.classList.remove('complete-win','complete-lose');
   board.classList.add(record.win ? 'complete-win' : 'complete-lose');
 
-  dayLabel.textContent = `Day ${round.day}`;
-  difficultyBadge.textContent = round.difficulty || 'Unrated';
-  difficultyBadge.style.color = RANK_COLORS[round.difficulty] || 'var(--muted)';
+  dayLabel.textContent = `Day ${meta.day}`;
+  difficultyBadge.textContent = meta.difficulty || 'Unrated';
+  difficultyBadge.style.color = RANK_COLORS[meta.difficulty] || 'var(--muted)';
   guessLabel.textContent = 'Finished';
 
   form.style.display = 'none';
@@ -1671,7 +1630,7 @@ function renderReadOnlyCompleted(round, record, isArchive){
   resultTitle.textContent = record.win
     ? `Identified in ${record.guessCount}/${MAX_GUESSES} guesses`
     : (record.gaveUp ? 'Answer revealed' : 'Out of guesses');
-  resultBody.textContent = `${round.team1} vs ${round.team2} — ${round.year}, ${tournamentDisplay(round)}.`;
+  resultBody.textContent = `${answer.team1} vs ${answer.team2} — ${answer.year}, ${answer.tournament}.`;
 
   mainShareBtn.disabled = false;
   mainShareBtn.textContent = 'Share result';
@@ -1712,13 +1671,17 @@ function maybeShowHowtoOnFirstAttempt(){
 
 /* ---------------- boot ---------------- */
 async function boot(){
+  if(!BACKEND_URL){
+    showBackendError();
+    document.querySelector('#lockedNote h3').textContent = 'Backend not configured';
+    lockedNoteBody.textContent = 'BACKEND_URL is empty in index.html \u2014 set it to your deployed Worker URL (see backend/README.md) before this game can run.';
+    return;
+  }
   loadStats();
   loadDailyProgress();
-  const trustedNow = await getTrustedNow();
-  currentDay = getCurrentDayNumber(trustedNow);
 
   bootLoading.style.display = 'none';
-  route();
+  await route();
   window.addEventListener('hashchange', route);
 }
 
