@@ -331,6 +331,16 @@
   .ac-lose{background:rgba(255,92,92,.15);color:var(--bad);}
   .ac-unplayed{background:rgba(124,135,152,.15);color:var(--muted);}
   .archive-empty{color:var(--muted);text-align:center;padding:50px 0;font-size:14px;}
+
+  /* ---------------- Footer credit ---------------- */
+  .site-footer{
+    text-align:center;margin-top:32px;padding-top:16px;
+    color:var(--muted);font-size:12px;
+  }
+  .site-footer a{
+    font-weight:700;color:var(--cyan);text-decoration:none;
+  }
+  .site-footer a:hover{text-decoration:underline;}
 </style>
 
 <!-- Google tag (gtag.js) -->
@@ -349,7 +359,7 @@
 
   <header>
     <h1 id="titleLink" title="Back to today's puzzle">OW GUESSR</h1>
-    <p class="sub">A section of a memorable moment from OW Esports is revealed with every guess. Name both teams, the year, and the tournament before the frame fills in.</p>
+    <p class="sub">A section of the broadcast frame is revealed with every guess. Name both teams, the year, and the tournament before the frame fills in.</p>
   </header>
 
   <div class="nav-row">
@@ -478,6 +488,8 @@
     <div class="archive-empty" id="archiveEmpty" style="display:none;">No archived puzzles yet — check back after today's puzzle rolls over.</div>
   </div>
 
+  <footer class="site-footer">Created by <a href="https://x.com/DerpyJakeTW" target="_blank" rel="noopener noreferrer">DerpyJake</a></footer>
+
 </div>
 
 <!-- Results modal (Wordle-style) -->
@@ -564,7 +576,7 @@
    BACKEND_URL is now required for the game to run at all (not just for
    stats) — see backend/README.md for how to deploy the Worker.
    ========================================================================= */
-const BACKEND_URL = 'https://owguessr-stats.owguessr.workers.dev'; // e.g. 'https://owguessr-stats.yoursubdomain.workers.dev'
+const BACKEND_URL = ''; // e.g. 'https://owguessr-stats.yoursubdomain.workers.dev'
 
 // The visitor's own IANA timezone (e.g. "Europe/London") — just a place
 // name, not a manipulable clock reading. The server uses its own trusted
@@ -1325,7 +1337,7 @@ document.addEventListener('keydown', (e)=>{
 
 /* ---------------- share (Wordle-style) ---------------- */
 // Appended to shared results.
-const SITE_URL = 'https://owguessr.com';
+const SITE_URL = 'owguessr.com';
 
 function buildShareText(){
   const outcome = solved
