@@ -89,11 +89,109 @@ const ROUNDS = [
     revealImage: "images/Day 6 Answer.png"
   },
   {
-    day: 7, difficulty: "Diamond",
-    team1: "Crazy Raccoont", team2: "Team Falcons",
+    day: 7, difficulty: "Platinum",
+    team1: "Crazy Raccoon", team2: "Team Falcons",
     year: 2024, tournament: ["World Finals", "Playoffs"],
     image: "images/Day 7.png",
     revealImage: "images/Day 7 Answer.png"
+  },
+   {
+    day: 8, difficulty: "Diamond",
+    team1: "New York Excelsior", team2: "Houston Outlaws",
+    year: 2019, tournament: "Stage 1",
+    image: "images/Day 8.png",
+    revealImage: "images/Day 8 Answer.png"
+  },
+   {
+    day: 9, difficulty: "Platinum",
+    team1: "Seoul Dynasty", team2: "Shanghai Dragons",
+    year: 2020, tournament: "May Melee",
+    image: "images/Day 9.png",
+    revealImage: "images/Day 9 Answer.png"
+  },
+   {
+    day: 10, difficulty: "Gold",
+    team1: "Dallas Fuel", team2: "Spacestation Gaming",
+    year: 2026, tournament: "Stage 1",
+    image: "images/Day 10.png",
+    revealImage: "images/Day 10 Answer.png"
+  },
+   {
+    day: 11, difficulty: "Grandmaster",
+    team1: "Vegas Eternal", team2: "London Spitfire",
+    year: 2023, tournament: ["Spring Stage Qualifiers", "Stage 1"],
+    image: "images/Day 11.png",
+    revealImage: "images/Day 11 Answer.png"
+  },
+   {
+    day: 12, difficulty: "Platinum",
+    team1: "New York Excelsior", team2: "Florida Mayhem",
+    year: 2018, tournament: "Stage 2",
+    image: "images/Day 12.png",
+    revealImage: "images/Day 12 Answer.png"
+  },
+   {
+    day: 13, difficulty: "Masters",
+    team1: "London Spitfire", team2: "Washington Justice",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 13.png",
+    revealImage: "images/Day 13 Answer.png"
+  },
+   {
+    day: 14, difficulty: "Diamond",
+    team1: "Chengdu Hunters", team2: "Los Angeles Gladiators",
+    year: 2021, tournament: "Countdown Cup",
+    image: "images/Day 14.png",
+    revealImage: "images/Day 14 Answer.png"
+  },
+   {
+    day: 15, difficulty: "Gold",
+    team1: "NTMR", team2: "Crazy Raccoon",
+    year: 2025, tournament: "Champions Clash",
+    image: "images/Day 15.png",
+    revealImage: "images/Day 15 Answer.png"
+  },
+   {
+    day: 16, difficulty: "Silver",
+    team1: "Paris Eternal", team2: "Atlanta Reign",
+    year: 2019, tournament: "Stage 1",
+    image: "images/Day 16.png",
+    revealImage: "images/Day 16 Answer.png"
+  },
+   {
+    day: 17, difficulty: "Platinum",
+    team1: "Paris Eternal", team2: "Philadelphia Fusion",
+    year: 2020, tournament: "Summer Showdown",
+    image: "images/Day 17.png",
+    revealImage: "images/Day 17 Answer.png"
+  },
+   {
+    day: 18, difficulty: "Grandmaster",
+    team1: "NTMR", team2: "Spacestation Gaming",
+    year: 2025, tournament: "Stage 3",
+    image: "images/Day 18.png",
+    revealImage: "images/Day 18 Answer.png"
+  },
+ {
+    day: 19, difficulty: "Grandmaster",
+    team1: "Paris Eternal", team2: "Florida Mayhem",
+    year: 2022, tournament: ["Kickoff Clash Qualifiers", "Stage 1"],
+    image: "images/Day 19.png",
+    revealImage: "images/Day 19 Answer.png"
+  },
+{
+    day: 20, difficulty: "Bronze",
+    team1: "Spacestation Gaming", team2: "ZETA Division",
+    year: 2026, tournament: "Champions Clash",
+    image: "images/Day 20.png",
+    revealImage: "images/Day 20 Answer.png"
+  },
+{
+    day: 21, difficulty: "Grandmaster",
+    team1: "Dallas Fuel", team2: "San Francisco Shock",
+    year: 2018, tournament: "Stage 3",
+    image: "images/Day 21.png",
+    revealImage: "images/Day 21 Answer.png"
   }
 ];
 
