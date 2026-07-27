@@ -192,6 +192,13 @@ const ROUNDS = [
     year: 2018, tournament: "Stage 3",
     image: "images/Day 21.png",
     revealImage: "images/Day 21 Answer.png"
+  },
+   {
+    day: 22, difficulty: "Gold",
+    team1: "Spacestation Gaming", team2: "Sakura Esports",
+    year: 2025, tournament: "Stage 3 Playoffs",
+    image: "images/Day 22.png",
+    revealImage: "images/Day 22 Answer.png"
   }
 ];
 
