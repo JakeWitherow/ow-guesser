@@ -181,7 +181,7 @@ const ROUNDS = [
   },
 {
     day: 20, difficulty: "Bronze",
-    team1: "Spacestation Gaming", team2: "ZETA Division",
+    team1: "Spacestation Gaming", team2: "ZETA DIVISION",
     year: 2026, tournament: "Champions Clash",
     image: "images/Day 20.png",
     revealImage: "images/Day 20 Answer.png"
