@@ -206,6 +206,34 @@ const ROUNDS = [
     year: 2025, tournament: "Esports World Cup",
     image: "images/Day 23.png",
     revealImage: "images/Day 23 Answer.png"
+  },
+   {
+    day: 24, difficulty: "Champion",
+    team1: "Houston Outlaws", team2: "Washington Justice",
+    year: 2021, tournament: ["Countdown Cup Qualifiers", "Stage 4"],
+    image: "images/Day 24.png",
+    revealImage: "images/Day 24 Answer.png"
+  },
+   {
+    day: 25, difficulty: "Bronze",
+    team1: "San Francisco Shock", team2: "Atlanta Reign",
+    year: 2021, tournament: "Playoffs",
+    image: "images/Day 25.png",
+    revealImage: "images/Day 25 Answer.png"
+  },
+   {
+    day: 26, difficulty: "Grandmaster",
+    team1: "Washington Justice", team2: "New York Excelsior",
+    year: 2019, tournament: "Stage 1",
+    image: "images/Day 26.png",
+    revealImage: "images/Day 26 Answer.png"
+  },
+   {
+    day: 27, difficulty: "Bronze",
+    team1: "ZETA DIVISION", team2: "Twisted Minds",
+    year: 2026, tournament: "Esports World Cup",
+    image: "images/Day 27.png",
+    revealImage: "images/Day 27 Answer.png"
   }
 ];
 
