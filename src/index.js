@@ -203,7 +203,7 @@ const ROUNDS = [
    {
     day: 23, difficulty: "Platinum",
     team1: "VARREL", team2: "Crazy Raccoon",
-    year: 2025, tournament: "Esports World Cup",
+    year: 2025, tournament: ["Esports World Cup", "Midseason Championship"],
     image: "images/Day 23.png",
     revealImage: "images/Day 23 Answer.png"
   },
@@ -231,7 +231,7 @@ const ROUNDS = [
    {
     day: 27, difficulty: "Bronze",
     team1: "ZETA DIVISION", team2: "Twisted Minds",
-    year: 2026, tournament: "Esports World Cup",
+    year: 2026, tournament: ["Esports World Cup", "Midseason Championship"],
     image: "images/Day 27.png",
     revealImage: "images/Day 27 Answer.png"
   }
