@@ -234,6 +234,13 @@ const ROUNDS = [
     year: 2026, tournament: ["Esports World Cup", "Midseason Championship"],
     image: "images/Day 27.png",
     revealImage: "images/Day 27 Answer.png"
+  },
+ {
+    day: 28, difficulty: "Platinum",
+    team1: "Boston Uprising", team2: "Houston Outlaws",
+    year: 2022, tournament: ["Midseason Madness Qualifiers", "Stage 2"],
+    image: "images/Day 28.png",
+    revealImage: "images/Day 28 Answer.png"
   }
 ];
 
