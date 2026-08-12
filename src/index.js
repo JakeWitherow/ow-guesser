@@ -241,6 +241,13 @@ const ROUNDS = [
     year: 2022, tournament: ["Midseason Madness Qualifiers", "Stage 2"],
     image: "images/Day 28.png",
     revealImage: "images/Day 28 Answer.png"
+  },
+{
+    day: 29, difficulty: "Grandmaster",
+    team1: "Seoul Dynasty", team2: "Philadelphia Fusion",
+    year: 2022, tournament: ["Midseason Madness Qualifiers", "Stage 2"],
+    image: "images/Day 29.png",
+    revealImage: "images/Day 29 Answer.png"
   }
 ];
 
