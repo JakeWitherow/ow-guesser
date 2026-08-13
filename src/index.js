@@ -248,6 +248,83 @@ const ROUNDS = [
     year: 2022, tournament: ["Midseason Madness Qualifiers", "Stage 2"],
     image: "images/Day 29.png",
     revealImage: "images/Day 29 Answer.png"
+  },
+{
+    day: 30, difficulty: "Masters",
+    team1: "Florida Mayhem", team2: "Washington Justice",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 30.png",
+    revealImage: "images/Day 30 Answer.png"
+  },
+{
+    day: 31, difficulty: "Platinum",
+    team1: "Virtus.pro", team2: "Gen.G",
+    year: 2025, tournament: "Stage 3 Playoffs",
+    image: "images/Day 31.png",
+    revealImage: "images/Day 31 Answer.png"
+  },
+{
+    day: 32, difficulty: "Gold",
+    team1: "Atlanta Reign", team2: "San Francisco Shock",
+    year: 2019, tournament: "Playoffs",
+    image: "images/Day 32.png",
+    revealImage: "images/Day 32 Answer.png"
+  },
+{
+    day: 33, difficulty: "Champion",
+    team1: "Atlanta Reign", team2: "Paris Eternal",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 33.png",
+    revealImage: "images/Day 33 Answer.png"
+  },
+   {
+    day: 34, difficulty: "Diamond",
+    team1: "Los Angeles Valiant", team2: "Dallas Fuel",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 34.png",
+    revealImage: "images/Day 34 Answer.png"
+  },
+   {
+    day: 35, difficulty: "Grandmaster",
+    team1: "New York Excelsior", team2: "Atlanta Reign",
+    year: 2022, tournament: ["Countdown Cup Qualifiers", "Stage 4"],
+    image: "images/Day 35.png",
+    revealImage: "images/Day 35 Answer.png"
+  },
+   {
+    day: 36, difficulty: "Gold",
+    team1: "Atlanta Reign", team2: "London Spitfire",
+    year: 2019, tournament: "Stage 2",
+    image: "images/Day 36.png",
+    revealImage: "images/Day 36 Answer.png"
+  },
+   {
+    day: 37, difficulty: "Diamond",
+    team1: "Vancouver Titans", team2: "Houston Outlaws",
+    year: 2021, tournament: ["Summer Showdown Qualifiers", "Stage 3"],
+    image: "images/Day 37.png",
+    revealImage: "images/Day 37 Answer.png"
+  },
+   {
+    day: 38, difficulty: "Silver",
+    team1: "San Francisco Shock", team2: "Vancouver Titans",
+    year: 2019, tournament: "Playoffs",
+    image: "images/Day 38.png",
+    revealImage: "images/Day 38 Answer.png"
+  },
+   {
+    day: 39, difficulty: "Diamond",
+    team1: "Toronto Defiant", team2: "Atlanta Reign",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 39.png",
+    revealImage: "images/Day 39 Answer.png"
+  },
+   {
+    day: 40, difficulty: "Champion",
+    team1: "Houston Outlaws", team2: "London Spitfire",
+    year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"],
+    image: "images/Day 40.png",
+    revealImage: "images/Day 40 Answer.png"
   }
 ];
 
