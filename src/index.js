@@ -332,6 +332,27 @@ const ROUNDS = [
     year: 2018, tournament: "Stage 4",
     image: "images/Day 41.png",
     revealImage: "images/Day 41 Answer.png"
+  },
+   {
+    day: 42, difficulty: "Silver",
+    team1: "Seoul Dynasty", team2: "San Francisco Shock",
+    year: 2020, tournament: ["Playoffs", "World Finals"],
+    image: "images/Day 42.png",
+    revealImage: "images/Day 42 Answer.png"
+  },
+   {
+    day: 43, difficulty: "Gold",
+    team1: "Boston Uprising", team2: "New York Excelsior",
+    year: 2018, tournament: "Stage 1",
+    image: "images/Day 43.png",
+    revealImage: "images/Day 43 Answer.png"
+  },
+   {
+    day: 44, difficulty: "Masters",
+    team1: "Hangzhou Spark", team2: "Los Angeles Gladiators",
+    year: 2022, tournament: "Midseason Madness",
+    image: "images/Day 44.png",
+    revealImage: "images/Day 44 Answer.png"
   }
 ];
 
