@@ -353,6 +353,34 @@ const ROUNDS = [
     year: 2022, tournament: "Midseason Madness",
     image: "images/Day 44.png",
     revealImage: "images/Day 44 Answer.png"
+  },
+   {
+    day: 45, difficulty: "Bronze",
+    team1: "Philadelphia Fusion", team2: "Vancouver Titans",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 45.png",
+    revealImage: "images/Day 45 Answer.png"
+  },
+   {
+    day: 46, difficulty: "Platinum",
+    team1: "San Francisco Shock", team2: "Boston Uprising",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 46.png",
+    revealImage: "images/Day 46 Answer.png"
+  },
+   {
+    day: 47, difficulty: "Gold",
+    team1: "Al Qadsiah", team2: "Twisted Minds",
+    year: 2025, tournament: ["World Finals", "Playoffs"],
+    image: "images/Day 47.png",
+    revealImage: "images/Day 47 Answer.png"
+  },
+   {
+    day: 48, difficulty: "Platinum",
+    team1: "Shanghai Dragons", team2: "Dallas Fuel",
+    year: 2021, tournament: "May Melee",
+    image: "images/Day 48.png",
+    revealImage: "images/Day 48 Answer.png"
   }
 ];
 
