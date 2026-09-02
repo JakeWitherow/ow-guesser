@@ -381,6 +381,13 @@ const ROUNDS = [
     year: 2021, tournament: "May Melee",
     image: "images/Day 48.png",
     revealImage: "images/Day 48 Answer.png"
+  },
+   {
+    day: 49, difficulty: "Platinum",
+    team1: "London Spitfire", team2: "New York Excelsior",
+    year: 2018, tournament: "Stage 2",
+    image: "images/Day 49.png",
+    revealImage: "images/Day 49 Answer.png"
   }
 ];
 
