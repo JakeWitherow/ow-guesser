@@ -388,6 +388,13 @@ const ROUNDS = [
     year: 2018, tournament: "Stage 2",
     image: "images/Day 49.png",
     revealImage: "images/Day 49 Answer.png"
+  },
+   {
+    day: 50, difficulty: "Grandmaster",
+    team1: "Team Vision", team2: "Goud Guys",
+    year: 2025, tournament: "Stage 3",
+    image: "images/Day 50.png",
+    revealImage: "images/Day 50 Answer.png"
   }
 ];
 
