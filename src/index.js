@@ -390,11 +390,46 @@ const ROUNDS = [
     revealImage: "images/Day 49 Answer.png"
   },
    {
-    day: 50, difficulty: "Grandmaster",
+    day: 50, difficulty: "Champion",
     team1: "Team Vision", team2: "Goud Guys",
     year: 2025, tournament: "Stage 3",
     image: "images/Day 50.png",
     revealImage: "images/Day 50 Answer.png"
+  },
+   {
+    day: 51, difficulty: "Gold",
+    team1: "Houston Outlaws", team2: "Florida Mayhem",
+    year: 2023, tournament: ["Playoffs", "World Finals"],
+    image: "images/Day 51.png",
+    revealImage: "images/Day 51 Answer.png"
+  },
+   {
+    day: 52, difficulty: "Platinum",
+    team1: "London Spitfire", team2: "New York Excelsior",
+    year: 2018, tournament: ["Stage 1 Title Matches", "Stage 1 Playoffs"],
+    image: "images/Day 52.png",
+    revealImage: "images/Day 52 Answer.png"
+  },
+   {
+    day: 53, difficulty: "Masters",
+    team1: "Paris Eternal", team2: "San Francisco Shock",
+    year: 2020, tournament: "Summer Showdown",
+    image: "images/Day 53.png",
+    revealImage: "images/Day 53 Answer.png"
+  },
+   {
+    day: 54, difficulty: "Diamond",
+    team1: "Houston Outlaws", team2: "San Francisco Shock",
+    year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"],
+    image: "images/Day 54.png",
+    revealImage: "images/Day 54 Answer.png"
+  },
+   {
+    day: 55, difficulty: "Gold",
+    team1: "San Francisco Shock", team2: "Dallas Fuel",
+    year: 2022, tournament: ["Playoffs", "World Finals"],
+    image: "images/Day 55.png",
+    revealImage: "images/Day 55 Answer.png"
   }
 ];
 
