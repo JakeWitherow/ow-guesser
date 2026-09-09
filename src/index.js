@@ -149,7 +149,7 @@ const ROUNDS = [
     team1: "NTMR", team2: "Crazy Raccoon",
     year: 2025, tournament: "Champions Clash",
     image: "images/Day 15.png",
-    revealImage: "images/Day 15 Answer.png"
+    revealImage: "images/Day 14 Answer.png"
   },
    {
     day: 16, difficulty: "Silver",
