@@ -333,6 +333,21 @@
   .ac-unplayed{background:rgba(124,135,152,.15);color:var(--muted);}
   .archive-empty{color:var(--muted);text-align:center;padding:50px 0;font-size:14px;}
 
+  /* ---------- OWWC teams page ---------- */
+  .owwc-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+  .owwc-header h2{font-family:'Rajdhani',sans-serif;font-size:24px;margin:0;letter-spacing:.03em;color:var(--text);}
+  .owwc-header p{margin:3px 0 0;color:var(--muted);font-size:13px;line-height:1.45;}
+  .owwc-search{max-width:300px;min-width:220px;}
+  .owwc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
+  .owwc-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:15px;transition:border-color .15s ease,transform .12s ease;}
+  .owwc-card:hover{border-color:var(--cyan);transform:translateY(-2px);}
+  .owwc-country{display:flex;align-items:center;gap:9px;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--text);}
+  .owwc-flag{font-family:'Inter',sans-serif;font-size:24px;line-height:1;}
+  .owwc-years{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px;}
+  .owwc-year{font-size:10px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:5px;background:var(--panel-raised);border:1px solid var(--line);color:var(--muted);}
+  .owwc-note{margin-top:16px;color:var(--muted);font-size:11px;line-height:1.5;text-align:center;}
+  .owwc-empty{color:var(--muted);text-align:center;padding:50px 0;font-size:14px;}
+
   /* ---------------- Footer credit ---------------- */
   .site-footer{
     text-align:center;margin-top:32px;padding-top:16px;
@@ -365,6 +380,7 @@
 
   <div class="nav-row">
     <button type="button" class="btn-ghost" id="archiveNavBtn">🗂 Archive</button>
+    <button type="button" class="btn-ghost" id="owwcNavBtn">🌍 OWWC Teams</button>
   </div>
 
   <div class="stats">
@@ -473,6 +489,22 @@
       </div>
 
     </div>
+    </div>
+  </div>
+
+  <!-- ============ OWWC TEAMS PAGE ============ -->
+  <div id="owwcSection" style="display:none;">
+    <div class="owwc-header">
+      <div>
+        <h2>Overwatch World Cup Teams</h2>
+        <p>Every nation that played on the Overwatch World Cup stage at BlizzCon from 2016–2019.</p>
+      </div>
+      <input class="owwc-search" id="owwcSearch" type="text" placeholder="Search nations..." autocomplete="off" />
+    </div>
+    <div class="owwc-grid" id="owwcGrid"></div>
+    <div class="owwc-empty" id="owwcEmpty" style="display:none;">No nations match your search.</div>
+    <div class="owwc-note">
+      Participation shown is for the BlizzCon finals/main event, not countries that only appeared in regional group stages or qualifiers.
     </div>
   </div>
 
@@ -772,9 +804,39 @@ const archiveListSection = document.getElementById('archiveListSection');
 const archiveGrid = document.getElementById('archiveGrid');
 const archiveEmpty = document.getElementById('archiveEmpty');
 const archiveHomeBtn = document.getElementById('archiveHomeBtn');
+const owwcSection = document.getElementById('owwcSection');
+const owwcGrid = document.getElementById('owwcGrid');
+const owwcEmpty = document.getElementById('owwcEmpty');
+const owwcSearch = document.getElementById('owwcSearch');
+const owwcNavBtn = document.getElementById('owwcNavBtn');
+
+// Nations that reached the OWWC main event at BlizzCon (2016–2019).
+// A nation is listed once, with every BlizzCon year in which it appeared.
+const OWWC_TEAMS = [
+  { country:'Australia', flag:'🇦🇺', years:[2016,2017,2018,2019] },
+  { country:'Brazil', flag:'🇧🇷', years:[2016] },
+  { country:'Canada', flag:'🇨🇦', years:[2016,2017,2018,2019] },
+  { country:'Chile', flag:'🇨🇱', years:[2016] },
+  { country:'China', flag:'🇨🇳', years:[2016,2017,2018,2019] },
+  { country:'Denmark', flag:'🇩🇰', years:[2019] },
+  { country:'Finland', flag:'🇫🇮', years:[2016,2018] },
+  { country:'France', flag:'🇫🇷', years:[2016,2017,2018,2019] },
+  { country:'Germany', flag:'🇩🇪', years:[2016] },
+  { country:'Netherlands', flag:'🇳🇱', years:[2019] },
+  { country:'Russia', flag:'🇷🇺', years:[2016] },
+  { country:'Singapore', flag:'🇸🇬', years:[2016] },
+  { country:'South Korea', flag:'🇰🇷', years:[2016,2017,2018,2019] },
+  { country:'Spain', flag:'🇪🇸', years:[2016] },
+  { country:'Sweden', flag:'🇸🇪', years:[2016,2017] },
+  { country:'Taiwan', flag:'🇹🇼', years:[2016] },
+  { country:'Thailand', flag:'🇹🇭', years:[2016] },
+  { country:'United Kingdom', flag:'🇬🇧', years:[2017,2018,2019] },
+  { country:'United States', flag:'🇺🇸', years:[2016,2017,2018,2019] },
+];
 
 titleLink.addEventListener('click', ()=>{ location.hash = '#/'; });
 archiveNavBtn.addEventListener('click', ()=>{ location.hash = '#/archive'; });
+owwcNavBtn.addEventListener('click', ()=>{ location.hash = '#/owwc'; });
 archiveBackBtn.addEventListener('click', ()=>{ location.hash = '#/archive'; });
 archiveHomeBtn.addEventListener('click', ()=>{ location.hash = '#/'; });
 
@@ -1488,6 +1550,8 @@ function route(){
     } else {
       showArchiveList();
     }
+  } else if(parts[0] === 'owwc'){
+    showOWWC();
   } else {
     showToday();
   }
@@ -1506,6 +1570,7 @@ function showBackendError(){
 
 async function showToday(){
   archiveListSection.style.display = 'none';
+  owwcSection.style.display = 'none';
   playSection.style.display = '';
   archiveBackBar.style.display = 'none';
 
@@ -1533,6 +1598,7 @@ async function showToday(){
 }
 
 async function showArchivePuzzle(day){
+  owwcSection.style.display = 'none';
   let meta;
   try{
     meta = await fetchPuzzleMeta(day);
@@ -1551,6 +1617,7 @@ async function showArchivePuzzle(day){
 }
 
 async function showArchiveList(){
+  owwcSection.style.display = 'none';
   playSection.style.display = 'none';
   archiveListSection.style.display = '';
   gtag('event', 'archive_view', {});
@@ -1597,6 +1664,35 @@ async function showArchiveList(){
     archiveGrid.appendChild(card);
   });
 }
+
+function renderOWWCTeams(filter='') {
+  const q = norm(filter);
+  const teams = OWWC_TEAMS.filter(t => norm(t.country).includes(q));
+  owwcGrid.innerHTML = '';
+  owwcEmpty.style.display = teams.length ? 'none' : 'block';
+
+  teams.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'owwc-card';
+    card.innerHTML = `
+      <div class="owwc-country"><span class="owwc-flag">${t.flag}</span>${escapeHtml(t.country)}</div>
+      <div class="owwc-years">
+        ${t.years.map(y => `<span class="owwc-year">${y}</span>`).join('')}
+      </div>
+    `;
+    owwcGrid.appendChild(card);
+  });
+}
+
+function showOWWC(){
+  playSection.style.display = 'none';
+  archiveListSection.style.display = 'none';
+  owwcSection.style.display = '';
+  renderOWWCTeams(owwcSearch.value);
+  owwcSearch.focus();
+}
+
+owwcSearch.addEventListener('input', () => renderOWWCTeams(owwcSearch.value));
 
 /* Renders the fully-revealed, read-only state for a puzzle that's already
    been completed on its release day (locks out further attempts until it
