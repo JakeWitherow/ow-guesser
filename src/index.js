@@ -430,6 +430,13 @@ const ROUNDS = [
     year: 2022, tournament: ["Playoffs", "World Finals"],
     image: "images/Day 55.png",
     revealImage: "images/Day 55 Answer.png"
+  },
+   {
+    day: 56, difficulty: "Diamond",
+    team1: "United States", team2: "South Korea",
+    year: 2016, tournament: "Overwatch World Cup",
+    image: "images/Day 56.png",
+    revealImage: "images/Day 56 Answer.png"
   }
 ];
 
