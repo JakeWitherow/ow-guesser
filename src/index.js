@@ -437,6 +437,13 @@ const ROUNDS = [
     year: 2016, tournament: "Overwatch World Cup",
     image: "images/Day 56.png",
     revealImage: "images/Day 56 Answer.png"
+  },
+    {
+    day: 57, difficulty: "Diamond",
+    team1: "United States", team2: "Germany",
+    year: 2017, tournament: "Overwatch World Cup",
+    image: "images/Day 57.png",
+    revealImage: "images/Day 57 Answer.png"
   }
 ];
 
