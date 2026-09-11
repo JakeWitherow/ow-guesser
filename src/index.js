@@ -444,6 +444,27 @@ const ROUNDS = [
     year: 2017, tournament: "Overwatch World Cup",
     image: "images/Day 57.png",
     revealImage: "images/Day 57 Answer.png"
+  },
+    {
+    day: 58, difficulty: "Diamond",
+    team1: "San Francisco Shock", team2: "Vancouver Titans",
+    year: 2019, tournament: ["Stage 1 Playoffs", "Stage 1 Title Matches"],
+    image: "images/Day 58.png",
+    revealImage: "images/Day 58 Answer.png"
+  },
+   {
+    day: 59, difficulty: "Platinum",
+    team1: "United Kingdom", team2: "United States",
+    year: 2018, tournament: "Overwatch World Cup",
+    image: "images/Day 59.png",
+    revealImage: "images/Day 59 Answer.png"
+  },
+   {
+    day: 60, difficulty: "Silver",
+    team1: "United States", team2: "Mexico",
+    year: 2026, tournament: "Overwatch World Cup Online Qualifiers",
+    image: "images/Day 60.png",
+    revealImage: "images/Day 60 Answer.png"
   }
 ];
 
