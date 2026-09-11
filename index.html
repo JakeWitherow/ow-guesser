@@ -308,6 +308,28 @@
   .nav-row{display:flex;justify-content:center;gap:10px;margin:-6px 0 18px;}
   h1{cursor:pointer;}
 
+  /* High-visibility navigation CTAs */
+  .btn-archive-feature, .btn-today-feature{
+    position:relative;overflow:hidden;border:1px solid transparent;
+    padding:11px 20px;font-size:14px;letter-spacing:.07em;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  }
+  .btn-archive-feature{
+    background:linear-gradient(90deg,var(--orange),#ffb35c);
+    color:#1a0f00;border-color:#ffc27b;
+    box-shadow:0 0 0 1px rgba(255,138,30,.18),0 0 22px rgba(255,138,30,.32),0 8px 24px rgba(0,0,0,.35);
+  }
+  .btn-today-feature{
+    background:linear-gradient(90deg,var(--cyan),#8ae9ff);
+    color:#03161c;border-color:#a8efff;
+    box-shadow:0 0 0 1px rgba(41,211,255,.18),0 0 22px rgba(41,211,255,.32),0 8px 24px rgba(0,0,0,.35);
+  }
+  .btn-archive-feature:hover, .btn-today-feature:hover{
+    transform:translateY(-2px) scale(1.03);filter:brightness(1.08);
+  }
+  .btn-archive-feature:active, .btn-today-feature:active{transform:translateY(0) scale(1);}
+
   /* ---------- Boot loading ---------- */
   .boot-loading{
     text-align:center;color:var(--muted);padding:70px 0;
@@ -380,7 +402,7 @@
   </header>
 
   <div class="nav-row">
-    <button type="button" class="btn-ghost" id="archiveNavBtn">🗂 Archive</button>
+    <button type="button" class="btn-archive-feature" id="archiveNavBtn">🗂 Archive</button>
   </div>
 
   <div class="stats">
@@ -499,7 +521,7 @@
         <h2>Archive</h2>
         <p>Play back puzzles from previous days. These don't count toward your streak.</p>
       </div>
-      <button type="button" class="btn-ghost" id="archiveHomeBtn">Today's puzzle &rarr;</button>
+      <button type="button" class="btn-today-feature" id="archiveHomeBtn">Today's puzzle &rarr;</button>
     </div>
     <div class="archive-grid" id="archiveGrid"></div>
     <div class="archive-empty" id="archiveEmpty" style="display:none;">No archived puzzles yet — check back after today's puzzle rolls over.</div>
@@ -721,21 +743,43 @@ const TEAMS = TEAM_GROUPS.flatMap(group => group.items);
 
 const YEARS = ["2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026"];
 
-// Exactly the list requested — OWL stage/tournament names plus the OWCS-era events.
-const TOURNAMENTS = [
+// Tournaments are separated into headings in the Tournament dropdown.
+// The OWL stage-era entries intentionally stay at the top in their existing order;
+// everything after those is alphabetical within its competition group.
+const OWL_TOURNAMENTS = [
+  "Season 3 Regular Season",
   "Stage 1","Stage 2","Stage 3","Stage 4",
   "Stage 1 Title Matches","Stage 2 Title Matches","Stage 3 Title Matches","Stage 4 Title Matches",
   "Stage 1 Playoffs","Stage 2 Playoffs","Stage 3 Playoffs","Stage 4 Playoffs",
-  "Playoffs","Play-Ins",
-  "Kickoff Clash","Kickoff Clash Qualifiers", "Season 3 Regular Season",
-  "Midseason Madness","Midseason Madness Qualifiers", "May Melee", "May Melee Qualifiers",
+  "Countdown Cup","Countdown Cup Qualifiers",
+  "June Joust","June Joust Qualifiers",
+  "Kickoff Clash","Kickoff Clash Qualifiers",
+  "May Melee","May Melee Qualifiers",
+  "Midseason Madness","Midseason Madness Qualifiers",
+  "Play-Ins","Playoffs",
+  "Spring Stage Knockouts","Spring Stage Qualifiers",
   "Summer Showdown","Summer Showdown Qualifiers",
-  "Countdown Cup","Countdown Cup Qualifiers", "June Joust", "June Joust Qualifiers",
-  "Spring Stage Qualifiers","Spring Stage Knockouts",
-  "Summer Stage Qualifiers","Summer Stage Knockouts",
-  "Dallas Major","Esports World Cup","World Finals","Champions Clash","Midseason Championship",
+  "Summer Stage Knockouts","Summer Stage Qualifiers"
+];
+
+const OWCS_TOURNAMENTS = [
+  "Stage 1","Stage 2","Stage 3","Stage 4",
+  "Stage 1 Playoffs","Stage 2 Playoffs","Stage 3 Playoffs","Stage 4 Playoffs",
+  "Champions Clash","Dallas Major","Esports World Cup","Midseason Championship","World Finals"
+];
+
+const OWWC_TOURNAMENTS = [
   "Overwatch World Cup","Overwatch World Cup Online Qualifiers"
 ];
+
+const TOURNAMENT_GROUPS = [
+  { heading: "Overwatch League", items: OWL_TOURNAMENTS },
+  { heading: "Overwatch Champions Series", items: OWCS_TOURNAMENTS },
+  { heading: "Overwatch World Cup", items: OWWC_TOURNAMENTS }
+];
+
+// Flat list used by validation; TOURNAMENT_GROUPS controls how the dropdown is displayed.
+const TOURNAMENTS = [...new Set(TOURNAMENT_GROUPS.flatMap(group => group.items))];
 
 /* ========================================================================= */
 
@@ -920,7 +964,7 @@ function hideAllAutocompletes(){
 setupAutocomplete('team1', 'acTeam1', () => TEAM_GROUPS);
 setupAutocomplete('team2', 'acTeam2', () => TEAM_GROUPS);
 setupAutocomplete('year', 'acYear', () => YEARS);
-setupAutocomplete('tournament', 'acTournament', () => TOURNAMENTS);
+setupAutocomplete('tournament', 'acTournament', () => TOURNAMENT_GROUPS);
 
 // Once a field has been marked correct/wrong from a prior guess, clear that
 // feedback the moment the person edits it again — the color no longer
