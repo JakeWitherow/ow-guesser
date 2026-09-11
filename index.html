@@ -328,6 +328,39 @@
   .btn-archive-feature:hover, .btn-today-feature:hover{
     transform:translateY(-2px) scale(1.03);filter:brightness(1.08);
   }
+  .btn-archive-back-feature{
+    position:relative;overflow:hidden;
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:10px 18px;font-size:13px;letter-spacing:.06em;
+    background:linear-gradient(90deg,var(--orange),#ffb35c);
+    color:#1a0f00;border:1px solid #ffc27b;border-radius:8px;
+    font-family:'Rajdhani',sans-serif;font-weight:700;
+    cursor:pointer;
+    box-shadow:0 0 0 1px rgba(255,138,30,.18),0 0 20px rgba(255,138,30,.28),0 6px 18px rgba(0,0,0,.3);
+    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  }
+  .btn-archive-back-feature:hover{
+    transform:translateY(-2px);filter:brightness(1.08);
+    box-shadow:0 0 0 1px rgba(255,138,30,.24),0 0 26px rgba(255,138,30,.38),0 8px 22px rgba(0,0,0,.35);
+  }
+  .btn-archive-back-feature:active{transform:translateY(0);}
+
+  .howto-btn.howto-feature{
+    width:32px;height:32px;
+    background:linear-gradient(135deg,var(--cyan),#8ae9ff);
+    border:1px solid #a8efff;
+    color:#03161c;
+    font-size:16px;
+    box-shadow:0 0 0 1px rgba(41,211,255,.18),0 0 18px rgba(41,211,255,.3),0 4px 14px rgba(0,0,0,.3);
+    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;
+  }
+  .howto-btn.howto-feature:hover{
+    transform:translateY(-2px) scale(1.06);filter:brightness(1.08);
+    border-color:#d5f8ff;color:#03161c;
+    box-shadow:0 0 0 1px rgba(41,211,255,.25),0 0 24px rgba(41,211,255,.4),0 6px 18px rgba(0,0,0,.35);
+  }
+  .howto-btn.howto-feature:active{transform:translateY(0) scale(1);}
+
   .btn-archive-feature:active, .btn-today-feature:active{transform:translateY(0) scale(1);}
 
   /* ---------- Boot loading ---------- */
@@ -402,7 +435,7 @@
   </header>
 
   <div class="nav-row">
-    <button type="button" class="btn-archive-feature" id="archiveNavBtn">🗂 Archive</button>
+    <button type="button" class="btn-archive-feature" id="archiveNavBtn">🗂 Archive - Past Puzzles</button>
   </div>
 
   <div class="stats">
@@ -418,7 +451,7 @@
   <div id="playSection" style="display:none;">
 
     <div class="archive-back-bar" id="archiveBackBar" style="display:none;">
-      <button type="button" class="btn-ghost" id="archiveBackBtn">&larr; Back to Archive</button>
+      <button type="button" class="btn-archive-back-feature" id="archiveBackBtn">&larr; Back to Archive</button>
     </div>
 
     <div class="locked-note" id="lockedNote" style="display:none;">
@@ -450,7 +483,7 @@
         <span class="badge" id="difficultyBadge">Bronze</span>
         <span class="dot">&bull;</span>
         <span class="muted" id="guessLabel">Guess 1 of 6</span>
-        <button type="button" class="howto-btn" id="howtoBtn" aria-label="How to play" title="How to play">?</button>
+        <button type="button" class="howto-btn howto-feature" id="howtoBtn" aria-label="How to play" title="How to play">?</button>
       </div>
 
       <form id="guessForm" autocomplete="off">
@@ -769,7 +802,7 @@ const OWCS_TOURNAMENTS = [
 ];
 
 const OWWC_TOURNAMENTS = [
-  "Overwatch World Cup","Overwatch World Cup Online Qualifiers"
+  "Overwatch World Cup","Overwatch World Cup Qualifiers"
 ];
 
 const TOURNAMENT_GROUPS = [
