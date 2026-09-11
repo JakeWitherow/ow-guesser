@@ -235,7 +235,7 @@
   .btn-ghost:hover{color:var(--text);border-color:var(--cyan);}
   .btn-danger{background:linear-gradient(90deg,var(--bad),#ff8a8a);color:#2a0505;}
   .btn-danger:hover{filter:brightness(1.08);}
-  button:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-reveal-feature{\n    background:linear-gradient(90deg,var(--bad),#ff8a8a);\n    color:#2a0505;border:1px solid #ffaaaa;\n    box-shadow:0 0 0 1px rgba(255,92,92,.18),0 0 18px rgba(255,92,92,.28),0 6px 18px rgba(0,0,0,.3);\n    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;\n  }\n  .btn-reveal-feature:hover{\n    transform:translateY(-2px);filter:brightness(1.08);\n    box-shadow:0 0 0 1px rgba(255,92,92,.24),0 0 24px rgba(255,92,92,.38),0 8px 22px rgba(0,0,0,.35);\n  }\n  .btn-reveal-feature:active{transform:translateY(0);}\n\n  .btn-share-feature{\n    background:linear-gradient(135deg,var(--cyan),#8ae9ff);\n    color:#03161c;border:1px solid #a8efff;\n    box-shadow:0 0 0 1px rgba(41,211,255,.18),0 0 18px rgba(41,211,255,.3),0 6px 18px rgba(0,0,0,.3);\n    transition:transform .15s ease, filter .15s ease, box-shadow .15s ease;\n  }\n  .btn-share-feature:hover:not(:disabled){\n    transform:translateY(-2px);filter:brightness(1.08);\n    box-shadow:0 0 0 1px rgba(41,211,255,.25),0 0 24px rgba(41,211,255,.4),0 8px 22px rgba(0,0,0,.35);\n  }\n  .btn-share-feature:active:not(:disabled){transform:translateY(0);}\n  button:disabled{opacity:.4;cursor:not-allowed;}
 
   /* ---------- Result banner ---------- */
   .result{
@@ -525,7 +525,7 @@
 
         <div class="actions">
           <button type="submit" class="btn-primary" id="submitBtn">Lock in guess</button>
-          <button type="button" class="btn-ghost" id="giveUpBtn">Reveal answer</button>
+          <button type="button" class="btn-reveal-feature" id="giveUpBtn">Reveal answer</button>
         </div>
       </form>
 
@@ -535,7 +535,7 @@
       </div>
 
       <div class="actions" style="margin:0;">
-        <button type="button" class="btn-ghost" id="mainShareBtn" disabled style="flex:1;">Share result</button>
+        <button type="button" class="btn-share-feature" id="mainShareBtn" disabled style="flex:1;">Share result</button>
       </div>
 
       <div class="history">
@@ -584,7 +584,7 @@
     </div>
 
     <div class="modal-actions">
-      <button type="button" class="btn-ghost" id="modalShareBtn" style="flex:1;">Share result</button>
+      <button type="button" class="btn-share-feature" id="modalShareBtn" style="flex:1;">Share result</button>
       <button type="button" class="btn-primary" id="modalNextBtn" style="flex:1;">Go to Archive &rarr;</button>
     </div>
   </div>
