@@ -465,6 +465,20 @@ const ROUNDS = [
     year: 2026, tournament: "Overwatch World Cup Online Qualifiers",
     image: "images/Day 60.png",
     revealImage: "images/Day 60 Answer.png"
+  },
+   {
+    day: 61, difficulty: "Masters",
+    team1: "New York Excelsior", team2: "Washington Justice",
+    year: 2019, tournament: "Stage 2",
+    image: "images/Day 61.png",
+    revealImage: "images/Day 61 Answer.png"
+  },
+   {
+    day: 62, difficulty: "Bronze",
+    team1: "Philadelphia Fusion", team2: "London Spitfire",
+    year: 2018, tournament: "Playoffs",
+    image: "images/Day 62.png",
+    revealImage: "images/Day 62 Answer.png"
   }
 ];
 
