@@ -479,6 +479,20 @@ const ROUNDS = [
     year: 2018, tournament: "Playoffs",
     image: "images/Day 62.png",
     revealImage: "images/Day 62 Answer.png"
+  },
+   {
+    day: 63, difficulty: "Diamond",
+    team1: "Los Angeles Gladiators", team2: "Los Angeles Valiant",
+    year: 2018, tournament: "Stage 3",
+    image: "images/Day 63.png",
+    revealImage: "images/Day 63 Answer.png"
+  },
+   {
+    day: 64, difficulty: "Diamond",
+    team1: "Houston Outlaws", team2: "San Francisco Shock",
+    year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"],
+    image: "images/Day 64.png",
+    revealImage: "images/Day 64 Answer.png"
   }
 ];
 
