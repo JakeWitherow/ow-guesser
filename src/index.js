@@ -493,6 +493,34 @@ const ROUNDS = [
     year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"],
     image: "images/Day 64.png",
     revealImage: "images/Day 64 Answer.png"
+  },
+   {
+    day: 65, difficulty: "Gold",
+    team1: "France", team2: "South Korea",
+    year: 2026, tournament: "Overwatch World Cup",
+    image: "images/Day 65.png",
+    revealImage: "images/Day 65 Answer.png"
+  },
+   {
+    day: 66, difficulty: "Platinum",
+    team1: "Saudi Arabia", team2: "China",
+    year: 2023, tournament: "Overwatch World Cup",
+    image: "images/Day 66.png",
+    revealImage: "images/Day 66 Answer.png"
+  },
+   {
+    day: 67, difficulty: "Grandmaster",
+    team1: "Washington Justice", team2: "Vancouver Titans",
+    year: 2022, tournament: ["Midseason Madness Qualifiers", "Stage 2"],
+    image: "images/Day 67.png",
+    revealImage: "images/Day 67 Answer.png"
+  },
+   {
+    day: 68, difficulty: "Bronze",
+    team1: "France", team2: "South Korea",
+    year: 2026, tournament: "Overwatch World Cup",
+    image: "images/Day 68.png",
+    revealImage: "images/Day 68 Answer.png"
   }
 ];
 
