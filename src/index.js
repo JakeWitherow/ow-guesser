@@ -528,6 +528,13 @@ const ROUNDS = [
     year: 2020, tournament: "Season 3 Regular Season",
     image: "images/Day 69.png",
     revealImage: "images/Day 69 Answer.png"
+  },
+   {
+    day: 70, difficulty: "Diamond",
+    team1: "Crazy Raccoon", team2: "Team Falcons",
+    year: 2024, tournament: "Dallas Major",
+    image: "images/Day 70.png",
+    revealImage: "images/Day 70 Answer.png"
   }
 ];
 
