@@ -542,6 +542,27 @@ const ROUNDS = [
     year: 2019, tournament: "Playoffs",
     image: "images/Day 71.png",
     revealImage: "images/Day 71 Answer.png"
+  },
+   {
+    day: 72, difficulty: "Masters",
+    team1: "Al Qadsiah", team2: "Twisted Minds",
+    year: 2025, tournament: "Stage 2 Playoffs",
+    image: "images/Day 72.png",
+    revealImage: "images/Day 72 Answer.png"
+  },
+   {
+    day: 73, difficulty: "Platinum",
+    team1: "Canada", team2: "South Korea",
+    year: 2017, tournament: "Overwatch World Cup",
+    image: "images/Day 73.png",
+    revealImage: "images/Day 73 Answer.png"
+  },
+    {
+    day: 74, difficulty: "Masters",
+    team1: "London Spitfire", team2: "Toronto Defiant",
+    year: 2023, tournament: "Play-Ins",
+    image: "images/Day 74.png",
+    revealImage: "images/Day 74 Answer.png"
   }
 ];
 
