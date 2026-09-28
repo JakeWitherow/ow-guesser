@@ -563,6 +563,13 @@ const ROUNDS = [
     year: 2023, tournament: "Play-Ins",
     image: "images/Day 74.png",
     revealImage: "images/Day 74 Answer.png"
+  },
+   {
+    day: 75, difficulty: "Diamond",
+    team1: "Vancouver Titans", team2: "Chengdu Hunters",
+    year: 2019, tournament: "Stage 1",
+    image: "images/Day 75.png",
+    revealImage: "images/Day 75 Answer.png"
   }
 ];
 
