@@ -570,6 +570,20 @@ const ROUNDS = [
     year: 2019, tournament: "Stage 1",
     image: "images/Day 75.png",
     revealImage: "images/Day 75 Answer.png"
+  },
+   {
+    day: 76, difficulty: "Platinum",
+    team1: "Seoul Dynasty", team2: "New York Excelsior",
+    year: 2019, tournament: "Stage 1 Playoffs",
+    image: "images/Day 76.png",
+    revealImage: "images/Day 76 Answer.png"
+  },
+   {
+    day: 77, difficulty: "Masters",
+    team1: "Los Angeles Valiant", team2: "San Francisco Shock",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 77.png",
+    revealImage: "images/Day 77 Answer.png"
   }
 ];
 
