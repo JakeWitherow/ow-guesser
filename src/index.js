@@ -591,6 +591,34 @@ const ROUNDS = [
     year: 2019, tournament: "Stage 1",
     image: "images/Day 78.png",
     revealImage: "images/Day 78 Answer.png"
+  },
+   {
+    day: 79, difficulty: "Diamond",
+    team1: "Los Angeles Gladiators", team2: "San Francisco Shock",
+    year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"],
+    image: "images/Day 79.png",
+    revealImage: "images/Day 79 Answer.png"
+  },
+   {
+    day: 80, difficulty: "Platinum",
+    team1: "Toronto Defiant", team2: "Twisted Minds",
+    year: 2024, tournament: ["World Finals", "Playoffs"],
+    image: "images/Day 80.png",
+    revealImage: "images/Day 80 Answer.png"
+  },
+   {
+    day: 81, difficulty: "Diamond",
+    team1: "Los Angeles Valiant", team2: "Dallas Fuel",
+    year: 2018, tournament: "Stage 1",
+    image: "images/Day 81.png",
+    revealImage: "images/Day 81 Answer.png"
+  },
+   {
+    day: 82, difficulty: "Grandmaster",
+    team1: "Chengdu Hunters", team2: "Shanghai Dragons",
+    year: 2021, tournament: "Summer Showdown",
+    image: "images/Day 82.png",
+    revealImage: "images/Day 82 Answer.png"
   }
 ];
 
