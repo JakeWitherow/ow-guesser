@@ -619,6 +619,13 @@ const ROUNDS = [
     year: 2021, tournament: "Summer Showdown",
     image: "images/Day 82.png",
     revealImage: "images/Day 82 Answer.png"
+  },
+   {
+    day: 83, difficulty: "Diamond",
+    team1: "Atlanta Reign", team2: "Washington Justice",
+    year: 2019, tournament: "Stage 2",
+    image: "images/Day 83.png",
+    revealImage: "images/Day 83 Answer.png"
   }
 ];
 
