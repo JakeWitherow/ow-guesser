@@ -640,6 +640,34 @@ const ROUNDS = [
     year: 2019, tournament: "Playoffs",
     image: "images/Day 85.png",
     revealImage: "images/Day 85 Answer.png"
+  },
+   {
+    day: 86, difficulty: "Masters",
+    team1: "Quick Esports", team2: "Al Qadsiah",
+    year: 2025, tournament: "Stage 3",
+    image: "images/Day 86.png",
+    revealImage: "images/Day 86 Answer.png"
+  },
+   {
+    day: 87, difficulty: "Masters",
+    team1: "Toronto Defiant", team2: "Chengdu Hunters",
+    year: 2019, tournament: "Stage 1",
+    image: "images/Day 87.png",
+    revealImage: "images/Day 87 Answer.png"
+  },
+   {
+    day: 88, difficulty: "Masters",
+    team1: "Dallas Fuel", team2: "San Francisco Shock",
+    year: 2021, tournament: ["June Joust Qualifiers", "Stage 2"],
+    image: "images/Day 88.png",
+    revealImage: "images/Day 88 Answer.png"
+  },
+   {
+    day: 89, difficulty: "Grandmaster",
+    team1: "Sakura Esports", team2: "NTMR",
+    year: 2025, tournament: "Stage 3 Playoffs",
+    image: "images/Day 89.png",
+    revealImage: "images/Day 89 Answer.png"
   }
 ];
 
