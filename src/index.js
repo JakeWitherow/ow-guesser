@@ -675,6 +675,48 @@ const ROUNDS = [
     year: 2025, tournament: "Stage 3 Playoffs",
     image: "images/Day 90.png",
     revealImage: "images/Day 90 Answer.png"
+  },
+   {
+    day: 91, difficulty: "Platinum",
+    team1: "San Francisco Shock", team2: "Los Angeles Valiant",
+    year: 2018, tournament: "Stage 1",
+    image: "images/Day 91.png",
+    revealImage: "images/Day 91 Answer.png"
+  },
+   {
+    day: 92, difficulty: "Masters",
+    team1: "Seoul Dynasty", team2: "Shanghai Dragons",
+    year: 2021, tournament: ["June Joust Qualifiers", "Stage 2"],
+    image: "images/Day 92.png",
+    revealImage: "images/Day 92 Answer.png"
+  },
+   {
+    day: 93, difficulty: "Platinum",
+    team1: "Los Angeles Gladiators", team2: "Los Angeles Valiant",
+    year: 2023, tournament: ["Summer Stage Qualifiers", "Stage 2"],
+    image: "images/Day 93.png",
+    revealImage: "images/Day 93 Answer.png"
+  },
+   {
+    day: 94, difficulty: "Diamond",
+    team1: "Team Falcons", team2: "Crazy Raccoon",
+    year: 2024, tournament: "Dallas Major",
+    image: "images/Day 94.png",
+    revealImage: "images/Day 94 Answer.png"
+  },
+   {
+    day: 95, difficulty: "Diamond",
+    team1: "New York Excelsior", team2: "Seoul Dynasty",
+    year: 2018, tournament: "Stage 2",
+    image: "images/Day 95.png",
+    revealImage: "images/Day 95 Answer.png"
+  },
+   {
+    day: 96, difficulty: "Gold",
+    team1: "Hangzhou Spark", team2: "Atlanta Reign",
+    year: 2023, tournament: "Playoffs",
+    image: "images/Day 96.png",
+    revealImage: "images/Day 96 Answer.png"
   }
 ];
 
