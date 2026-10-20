@@ -724,6 +724,48 @@ const ROUNDS = [
     year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"],
     image: "images/Day 97.png",
     revealImage: "images/Day 97 Answer.png"
+  },
+   {
+    day: 98, difficulty: "Masters",
+    team1: "Washington Jutice", team2: "Dallas Fuel",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 98.png",
+    revealImage: "images/Day 98 Answer.png"
+  },
+   {
+    day: 99, difficulty: "Silver",
+    team1: "United States", team2: "China",
+    year: 2019, tournament: "Overwatch World Cup",
+    image: "images/Day 99.png",
+    revealImage: "images/Day 99 Answer.png"
+  },
+   {
+    day: 100, difficulty: "Gold",
+    team1: "Toronto Defiant", team2: "NRG Shock",
+    year: 2024, tournament: "Stage 3 Playoffs",
+    image: "images/Day 100.png",
+    revealImage: "images/Day 100 Answer.png"
+  },
+   {
+    day: 101, difficulty: "Platinum",
+    team1: "Shanghai Dragons", team2: "San Francisco Shock",
+    year: 2019, tournament: "Stage 3 Playoffs",
+    image: "images/Day 101.png",
+    revealImage: "images/Day 101 Answer.png"
+  },
+   {
+    day: 102, difficulty: "Diamond",
+    team1: "NTMR", team2: "Toronto Defiant",
+    year: 2024, tournament: "Stage 4 Playoffs",
+    image: "images/Day 102.png",
+    revealImage: "images/Day 102 Answer.png"
+  },
+   {
+    day: 103, difficulty: "Platinum",
+    team1: "Los Angeles Gladiators", team2: "San Francisco Shock",
+    year: 2022, tournament: "Midseason Madness",
+    image: "images/Day 103.png",
+    revealImage: "images/Day 103 Answer.png"
   }
 ];
 
