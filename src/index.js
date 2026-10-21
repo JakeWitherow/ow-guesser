@@ -727,7 +727,7 @@ const ROUNDS = [
   },
    {
     day: 98, difficulty: "Masters",
-    team1: "Washington Jutice", team2: "Dallas Fuel",
+    team1: "Washington Justice", team2: "Dallas Fuel",
     year: 2020, tournament: "Season 3 Regular Season",
     image: "images/Day 98.png",
     revealImage: "images/Day 98 Answer.png"
