@@ -766,6 +766,48 @@ const ROUNDS = [
     year: 2022, tournament: "Midseason Madness",
     image: "images/Day 103.png",
     revealImage: "images/Day 103 Answer.png"
+  },
+   {
+    day: 104, difficulty: "Diamond",
+    team1: "Dallas Fuel", team2: "Los Angeles Valiant",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 104.png",
+    revealImage: "images/Day 104 Answer.png"
+  },
+   {
+    day: 105, difficulty: "Diamond",
+    team1: "Toronto Defiant", team2: "San Francisco Shock",
+    year: 2020, tournament: "Season 3 Regular Season",
+    image: "images/Day 105.png",
+    revealImage: "images/Day 105 Answer.png"
+  },
+   {
+    day: 106, difficulty: "Bronze",
+    team1: "Virtus.pro", team2: "Twisted Minds",
+    year: 2026, tournament: "Stage 3",
+    image: "images/Day 106.png",
+    revealImage: "images/Day 106 Answer.png"
+  },
+   {
+    day: 107, difficulty: "Masters",
+    team1: "Philadelphia Fusion", team2: "Paris Eternal",
+    year: 2020, tournament: "Countdown Cup",
+    image: "images/Day 107.png",
+    revealImage: "images/Day 107 Answer.png"
+  },
+   {
+    day: 108, difficulty: "Champion",
+    team1: "Ataraxia", team2: "Peace and Love",
+    year: 2024, tournament: "Stage 2",
+    image: "images/Day 108.png",
+    revealImage: "images/Day 108 Answer.png"
+  },
+   {
+    day: 109, difficulty: "Bronze",
+    team1: "Geekay Esports", team2: "Twisted Minds",
+    year: 2026, tournament: "Stage 3",
+    image: "images/Day 109.png",
+    revealImage: "images/Day 109 Answer.png"
   }
 ];
 
