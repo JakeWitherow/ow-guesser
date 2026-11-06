@@ -836,6 +836,13 @@ const ROUNDS = [
     year: 2024, tournament: "Stage 1",
     image: "images/Day 113.png",
     revealImage: "images/Day 113 Answer.png"
+  },
+   {
+    day: 114, difficulty: "Silver",
+    team1: "Atlanta Reign", team2: "San Francisco Shock",
+    year: 2019, tournament: "Playoffs",
+    image: "images/Day 114.png",
+    revealImage: "images/Day 114 Answer.png"
   }
 ];
 
