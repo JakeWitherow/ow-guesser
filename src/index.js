@@ -843,6 +843,13 @@ const ROUNDS = [
     year: 2019, tournament: "Playoffs",
     image: "images/Day 114.png",
     revealImage: "images/Day 114 Answer.png"
+  },
+   {
+    day: 115, difficulty: "Gold",
+    team1: "Weibo Gaming", team2: "Team Falcons",
+    year: 2026, tournament: ["Midseason Championship", "Esports World Cup"],
+    image: "images/Day 115.png",
+    revealImage: "images/Day 115 Answer.png"
   }
 ];
 
