@@ -885,6 +885,13 @@ const ROUNDS = [
     year: 2020, tournament: "Season 3 Regular Season", 
     image: "images/Day 120.png",
     revealImage: "images/Day 120 Answer.png"
+  },
+   {
+    day: 121, difficulty: "Diamond",
+    team1: "Seoul Dynasty", team2: "New York Excelsior",
+    year: 2019, tournament: "Stage 1 Playoffs", 
+    image: "images/Day 121.png",
+    revealImage: "images/Day 121 Answer.png"
   }
 ];
 
