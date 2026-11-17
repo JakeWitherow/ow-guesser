@@ -913,6 +913,13 @@ const ROUNDS = [
     year: 2022, tournament: "Summer Showdown", 
     image: "images/Day 124.png",
     revealImage: "images/Day 124 Answer.png"
+  },
+   {
+    day: 125, difficulty: "Silver",
+    team1: "Twisted Minds", team2: "Team Peps",
+    year: 2026, tournament: "Stage 3 Playoffs", 
+    image: "images/Day 125.png",
+    revealImage: "images/Day 125 Answer.png"
   }
 ];
 
