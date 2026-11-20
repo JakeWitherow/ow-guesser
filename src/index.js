@@ -934,6 +934,13 @@ const ROUNDS = [
     year: 2021, tournament: ["May Melee Qualifiers", "Stage 1"], 
     image: "images/Day 127.png",
     revealImage: "images/Day 127 Answer.png"
+  },
+   {
+    day: 128, difficulty: "Diamond",
+    team1: "Shanghai Dragons", team2: "Chengdu Hunters",
+    year: 2022, tournament: ["Kickoff Clash Qualifiers", "Stage 1"], 
+    image: "images/Day 128.png",
+    revealImage: "images/Day 128 Answer.png"
   }
 ];
 
