@@ -941,6 +941,13 @@ const ROUNDS = [
     year: 2022, tournament: ["Kickoff Clash Qualifiers", "Stage 1"], 
     image: "images/Day 128.png",
     revealImage: "images/Day 128 Answer.png"
+  },
+   {
+    day: 129, difficulty: "Platinum",
+    team1: "Atlanta Reign", team2: "London Spitfire",
+    year: 2022, tournament: "Midseason Madness", 
+    image: "images/Day 129.png",
+    revealImage: "images/Day 129 Answer.png"
   }
 ];
 
