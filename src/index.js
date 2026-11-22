@@ -948,6 +948,13 @@ const ROUNDS = [
     year: 2022, tournament: "Midseason Madness", 
     image: "images/Day 129.png",
     revealImage: "images/Day 129 Answer.png"
+  },
+   {
+    day: 130, difficulty: "Champion",
+    team1: "VEC", team2: "From The Gamer",
+    year: 2025, tournament: "Stage 1", 
+    image: "images/Day 130.png",
+    revealImage: "images/Day 130 Answer.png"
   }
 ];
 
