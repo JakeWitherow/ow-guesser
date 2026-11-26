@@ -976,6 +976,13 @@ const ROUNDS = [
     year: 2026, tournament: "Overwatch World Cup", 
     image: "images/Day 133.png",
     revealImage: "images/Day 133 Answer.png"
+  },
+   {
+    day: 134, difficulty: "Masters",
+    team1: "London Spitfire", team2: "Washington Justice",
+    year: 2019, tournament: "Stage 3", 
+    image: "images/Day 134.png",
+    revealImage: "images/Day 134 Answer.png"
   }
 ];
 
