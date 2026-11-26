@@ -973,7 +973,7 @@ const ROUNDS = [
    {
     day: 133, difficulty: "Masters",
     team1: "Sweden", team2: "United States",
-    year: 2026, tournament: "Overwatch World Cup Online Qualifiers", 
+    year: 2026, tournament: "Overwatch World Cup", 
     image: "images/Day 133.png",
     revealImage: "images/Day 133 Answer.png"
   }
