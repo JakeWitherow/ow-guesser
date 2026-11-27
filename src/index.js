@@ -983,7 +983,21 @@ const ROUNDS = [
     year: 2019, tournament: "Stage 3", 
     image: "images/Day 134.png",
     revealImage: "images/Day 134 Answer.png"
-  }
+  },
+   {
+    day: 135, difficulty: "Masters",
+    team1: "Seoul Dynasty", team2: "Philadelphia Fusion",
+    year: 2022, tournament: ["Midseason Madness Qualifiers", "Stage 2"],
+    image: "images/Day 135.png",
+    revealImage: "images/Day 135 Answer.png"
+  },
+   {
+    day: 136, difficulty: "Diamond",
+    team1: "Twisted Minds", team2: "Al Qadsiah",
+    year: 2025, tournament: ["Midseason Championship", "Esports World Cup"],
+    image: "images/Day 136.png",
+    revealImage: "images/Day 136 Answer.png"
+  },
 ];
 
 /* =========================================================================
